@@ -7,13 +7,7 @@
 ----------------------------- */
 int Get_Button(int ch)
 {
-    ADC_RSQ2(ADC0)=0;
-    ADC_RSQ2(ADC0)=ch;
-    ADC_CTL1(ADC0)|=ADC_CTL1_ADCON;
-    while(!(ADC_STAT(ADC0)&ADC_STAT_EOC));
-    uint16_t ret=ADC_RDATA(ADC0)&0xFFFF;
-    ADC_STAT(ADC0)&=~ADC_STAT_EOC;
-    return(ret>4000?1:0);
+    return (int)(gpio_input_bit_get(GPIOA, ch));
 }
 
 /* -----------------------------
