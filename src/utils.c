@@ -7,7 +7,11 @@
 ----------------------------- */
 int Get_Button(int ch)
 {
-    return (int)(gpio_input_bit_get(GPIOA, ch));
+    /* hack for new board*/
+    if (ch != GPIO_PIN_13)
+        return (int)(gpio_input_bit_get(GPIOA, ch));
+    else
+        return (int)(gpio_input_bit_get(GPIOC, ch));
 }
 
 /* -----------------------------
