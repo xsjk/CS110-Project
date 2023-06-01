@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <lcd/lcd.h>
+#include "game.h"
 
 #define IMAGE_WIDTH 8
 #define IMAGE_HEIGHT 8
@@ -19,3 +20,5 @@
 #define IMG_GK_IN_CAGE 3
 #define IMG_TREE 4
 extern const uint16_t images[IMAGE_COUNT][IMAGE_SIZE];
+
+extern const GameState gameLevel1;
