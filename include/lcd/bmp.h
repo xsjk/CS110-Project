@@ -1,6 +1,6 @@
 #ifndef __BMP_H
 #define __BMP_H
-#define	u8 unsigned char
+#define	uint8_t unsigned char
 
 const unsigned char logo_bmp[25600] = { /* 0X00,0X10,0XA0,0X00,0X50,0X00,0X01,0X1B, */
 0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,

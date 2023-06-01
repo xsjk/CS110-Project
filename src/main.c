@@ -23,30 +23,31 @@ int main(void)
     // YOUR CODE HERE
     while (1)
     {
-        LCD_Clear(BLACK);
-        LCD_ShowString(60,25,"TEST",WHITE);
-        if (Get_Button(JOY_LEFT))
-        {
-            LCD_ShowString(5,25,"L", BLUE);
-            //continue;
-        }
-        if (Get_Button(JOY_DOWN))
-        {
-            LCD_ShowString(25,45,"D", BLUE);
-        }
-        LCD_ShowString(5,5,"U:INOP",RED);
-        if (Get_Button(JOY_RIGHT))
-        {
-            LCD_ShowString(45,25,"R", BLUE);
-        }
-        if (Get_Button(JOY_CTR))
-        {
-            LCD_ShowString(25,25,"C", BLUE);
-        }
-        if (Get_Button(BUTTON_1))
-        {
-            LCD_ShowString(60,5,"SW1", BLUE);
-        }
-        LCD_ShowString(60,45,"SW2:INOP",RED);
+        LCD_ShowLogo();
+        // LCD_Clear(BLACK);
+        // LCD_ShowString(60,25,"TEST",WHITE);
+        // if (Get_Button(JOY_LEFT))
+        // {
+        //     LCD_ShowString(5,25,"L", BLUE);
+        //     //continue;
+        // }
+        // if (Get_Button(JOY_DOWN))
+        // {
+        //     LCD_ShowString(25,45,"D", BLUE);
+        // }
+        // LCD_ShowString(5,5,"U:INOP",RED);
+        // if (Get_Button(JOY_RIGHT))
+        // {
+        //     LCD_ShowString(45,25,"R", BLUE);
+        // }
+        // if (Get_Button(JOY_CTR))
+        // {
+        //     LCD_ShowString(25,25,"C", BLUE);
+        // }
+        // if (Get_Button(BUTTON_1))
+        // {
+        //     LCD_ShowString(60,5,"SW1", BLUE);
+        // }
+        // LCD_ShowString(60,45,"SW2:INOP",RED);
     }
 }

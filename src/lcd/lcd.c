@@ -1,7 +1,7 @@
 #include "lcd/lcd.h"
 #include "lcd/oledfont.h"
 #include "lcd/bmp.h"
-u16 BACK_COLOR;   //Background color
+uint16_t BACK_COLOR;   //Background color
 
 
 /******************************************************************************
@@ -9,7 +9,7 @@ u16 BACK_COLOR;   //Background color
        Entry data: serial data to be written to dat
        Return value: None
 ******************************************************************************/
-void LCD_Writ_Bus(u8 dat) 
+void LCD_Writ_Bus(uint8_t dat) 
 {
 #if SPI0_CFG == 1
 	OLED_CS_Clr();
@@ -23,7 +23,7 @@ void LCD_Writ_Bus(u8 dat)
 #elif SPI0_CFG == 2
 	spi_dma_enable(SPI0, SPI_DMA_TRANSMIT);
 #else
-	u8 i;
+	uint8_t i;
 	OLED_CS_Clr();
 	for(i=0;i<8;i++)
 	{			  
@@ -45,7 +45,7 @@ void LCD_Writ_Bus(u8 dat)
        Entry data: data written by dat
        Return value: None
 ******************************************************************************/
-void LCD_WR_DATA8(u8 dat)
+void LCD_WR_DATA8(uint8_t dat)
 {
 	OLED_DC_Set();//Write data
 	LCD_Writ_Bus(dat);
@@ -57,7 +57,7 @@ void LCD_WR_DATA8(u8 dat)
        Entry data: data written by dat
        Return value: None
 ******************************************************************************/
-void LCD_WR_DATA(u16 dat)
+void LCD_WR_DATA(uint16_t dat)
 {
 	OLED_DC_Set();//Write data
 	LCD_Writ_Bus(dat>>8);
@@ -70,7 +70,7 @@ void LCD_WR_DATA(u16 dat)
        Entry data: command written by dat
        Return value: None
 ******************************************************************************/
-void LCD_WR_REG(u8 dat)
+void LCD_WR_REG(uint8_t dat)
 {
 	OLED_DC_Clr();//Write command
 	LCD_Writ_Bus(dat);
@@ -83,7 +83,7 @@ void LCD_WR_REG(u8 dat)
                    y1, y2 set the start and end addresses of the line
        Return value: None
 ******************************************************************************/
-void LCD_Address_Set(u16 x1,u16 y1,u16 x2,u16 y2)
+void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 	if(USE_HORIZONTAL==0)
 	{
@@ -341,9 +341,9 @@ void Lcd_Init(void)
        Entry data: None
        Return value: None
 ******************************************************************************/
-void LCD_Clear(u16 Color)
+void LCD_Clear(uint16_t Color)
 {
-	u16 i,j;  	
+	uint16_t i,j;  	
 	LCD_Address_Set(0,0,LCD_W-1,LCD_H-1);
     for(i=0;i<LCD_W;i++)
 	  {
@@ -362,10 +362,10 @@ void LCD_Clear(u16 Color)
                    size font size
        Return value: None
 ******************************************************************************/
-void LCD_ShowChinese(u16 x,u16 y,u8 index,u8 size,u16 color)	
+void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t index,uint8_t size,uint16_t color)	
 {  
-	u8 i,j;
-	u8 *temp,size1;
+	uint8_t i,j;
+	uint8_t *temp,size1;
 	if(size==16){temp=Hzk16;}//选择字号
 	if(size==32){temp=Hzk32;}
   LCD_Address_Set(x,y,x+size-1,y+size-1); //设置一个汉字的区域
@@ -394,7 +394,7 @@ void LCD_ShowChinese(u16 x,u16 y,u8 index,u8 size,u16 color)
        Entry data: x, y starting coordinates
        Return value: None
 ******************************************************************************/
-void LCD_DrawPoint(u16 x,u16 y,u16 color)
+void LCD_DrawPoint(uint16_t x,uint16_t y,uint16_t color)
 {
 	LCD_Address_Set(x,y,x,y);//设置光标位置 
 	LCD_WR_DATA(color);
@@ -406,7 +406,7 @@ void LCD_DrawPoint(u16 x,u16 y,u16 color)
        Entry data: x, y starting coordinates
        Return value: None
 ******************************************************************************/
-void LCD_DrawPoint_big(u16 x,u16 y,u16 color)
+void LCD_DrawPoint_big(uint16_t x,uint16_t y,uint16_t color)
 {
 	LCD_Fill(x-1,y-1,x+1,y+1,color);
 } 
@@ -418,9 +418,9 @@ void LCD_DrawPoint_big(u16 x,u16 y,u16 color)
                    xend, yend termination coordinates
        Return value: None
 ******************************************************************************/
-void LCD_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 color)
+void LCD_Fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color)
 {          
-	u16 i,j; 
+	uint16_t i,j; 
 	LCD_Address_Set(xsta,ysta,xend,yend);      //设置光标位置 
 	for(i=ysta;i<=yend;i++)
 	{													   	 	
@@ -435,9 +435,9 @@ void LCD_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 color)
                    x2, y2 terminating coordinates
        Return value: None
 ******************************************************************************/
-void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
+void LCD_DrawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color)
 {
-	u16 t; 
+	uint16_t t; 
 	int xerr=0,yerr=0,delta_x,delta_y,distance;
 	int incx,incy,uRow,uCol;
 	delta_x=x2-x1; //计算坐标增量 
@@ -477,7 +477,7 @@ void LCD_DrawLine(u16 x1,u16 y1,u16 x2,u16 y2,u16 color)
                    x2, y2 terminating coordinates
        Return value: None
 ******************************************************************************/
-void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2,u16 color)
+void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,uint16_t color)
 {
 	LCD_DrawLine(x1,y1,x2,y1,color);
 	LCD_DrawLine(x1,y1,x1,y2,color);
@@ -492,7 +492,7 @@ void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2,u16 color)
                    r radius
        Return value: None
 ******************************************************************************/
-void LCD_DrawCircle(u16 x0,u16 y0,u8 r,u16 color)
+void LCD_DrawCircle(uint16_t x0,uint16_t y0,uint8_t r,uint16_t color)
 {
 	int a,b;
 	// int di;
@@ -523,11 +523,11 @@ void LCD_DrawCircle(u16 x0,u16 y0,u8 r,u16 color)
                    mode 1 superimposed mode 0 non-superimposed mode
        Return value: None
 ******************************************************************************/
-void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color)
+void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t mode,uint16_t color)
 {
-    u8 temp;
-    u8 pos,t;
-	  u16 x0=x;    
+    uint8_t temp;
+    uint8_t pos,t;
+	  uint16_t x0=x;    
     if(x>LCD_W-16||y>LCD_H-16)return;	    //Settings window		   
 	num=num-' ';//Get offset value
 	LCD_Address_Set(x,y,x+8-1,y+16-1);      //Set cursor position
@@ -535,7 +535,7 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color)
 	{
 		for(pos=0;pos<16;pos++)
 		{ 
-			temp=asc2_1608[(u16)num*16+pos];		 //Call 1608 font
+			temp=asc2_1608[(uint16_t)num*16+pos];		 //Call 1608 font
 			for(t=0;t<8;t++)
 		    {                 
 		        if(temp&0x01)LCD_WR_DATA(color);
@@ -550,7 +550,7 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color)
 	{
 		for(pos=0;pos<16;pos++)
 		{
-		    temp=asc2_1608[(u16)num*16+pos];		 //Call 1608 font
+		    temp=asc2_1608[(uint16_t)num*16+pos];		 //Call 1608 font
 			for(t=0;t<8;t++)
 		    {                 
 		        if(temp&0x01)LCD_DrawPoint(x+t,y+pos,color);//Draw a dot   
@@ -567,7 +567,7 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 mode,u16 color)
                    *p string start address
        Return value: None
 ******************************************************************************/
-void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color)
+void LCD_ShowString(uint16_t x,uint16_t y,const uint8_t *p,uint16_t color)
 {         
     while(*p!='\0')
     {       
@@ -585,9 +585,9 @@ void LCD_ShowString(u16 x,u16 y,const u8 *p,u16 color)
        Entry data: base m, n exponent
        Return value: None
 ******************************************************************************/
-u32 mypow(u8 m,u8 n)
+uint32_t mypow(uint8_t m,uint8_t n)
 {
-	u32 result=1;	 
+	uint32_t result=1;	 
 	while(n--)result*=m;    
 	return result;
 }
@@ -600,10 +600,10 @@ u32 mypow(u8 m,u8 n)
                    len number of digits to display
        Return value: None
 ******************************************************************************/
-void LCD_ShowNum(u16 x,u16 y,u16 num,u8 len,u16 color)
+void LCD_ShowNum(uint16_t x,uint16_t y,uint16_t num,uint8_t len,uint16_t color)
 {         	
-	u8 t,temp;
-	u8 enshow=0;
+	uint8_t t,temp;
+	uint8_t enshow=0;
 	for(t=0;t<len;t++)
 	{
 		temp=(num/mypow(10,len-t-1))%10;
@@ -628,11 +628,11 @@ void LCD_ShowNum(u16 x,u16 y,u16 num,u8 len,u16 color)
                    len number of digits to display
        Return value: None
 ******************************************************************************/
-void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color)
+void LCD_ShowNum1(uint16_t x,uint16_t y,float num,uint8_t len,uint16_t color)
 {         	
-	u8 t,temp;
-	// u8 enshow=0;
-	u16 num1;
+	uint8_t t,temp;
+	// uint8_t enshow=0;
+	uint16_t num1;
 	num1=num*100;
 	for(t=0;t<len;t++)
 	{
@@ -653,7 +653,7 @@ void LCD_ShowNum1(u16 x,u16 y,float num,u8 len,u16 color)
        Entry data: x, y starting point coordinates
        Return value: None
 ******************************************************************************/
-void LCD_ShowPicture(u16 x1,u16 y1,u16 x2,u16 y2)
+void LCD_ShowPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 	int i;
 	LCD_Address_Set(x1,y1,x2,y2);
