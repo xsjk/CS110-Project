@@ -1,4 +1,4 @@
-#include "mylcd.h"
+#include "lcd.h"
 #include "gd32vf103.h"
 #include "systick.h"
 

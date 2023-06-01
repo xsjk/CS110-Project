@@ -1,8 +1,8 @@
-#include "utils.h"
+#include "button.h"
 #include "gd32vf103_libopt.h"
 
 #define DELAY 2000
-uint64_t lastPressed[5] = {0, 0, 0, 0, 0};
+uint64_t lastPressed[] = {0, 0, 0, 0, 0, 0};
 
 /* -----------------------------
  Description: Return 1 if button number ch is pressed
@@ -10,10 +10,7 @@ uint64_t lastPressed[5] = {0, 0, 0, 0, 0};
 ----------------------------- */
 int getButtonRaw(int ch) {
  /* hack for new board*/
-  if (ch != GPIO_PIN_13)
-    return (int)(gpio_input_bit_get(GPIOA, ch));
-  else
-    return (int)(gpio_input_bit_get(GPIOC, ch));
+  return (gpio_input_bit_get(ch != GPIO_PIN_13 ? GPIOA : GPIOC, ch));
 }
 
 // getButtonRaw with debouncing
@@ -35,6 +32,9 @@ int Get_Button(int ch) {
     else if (ch == BUTTON_1 && time - lastPressed[4] > DELAY) {
         return lastPressed[4] = time, 1;
     }
+    else if (ch == BOOT_0 && time - lastPressed[5] > DELAY) {
+        return lastPressed[5] = time, 1;
+    }
   }
   return 0;
 }
@@ -44,3 +44,11 @@ int Get_Button(int ch) {
                           Return 0 otherwise
 ----------------------------- */
 int Get_BOOT0(void) { return (int)(gpio_input_bit_get(GPIOA, GPIO_PIN_8)); }
+
+
+void button_init(void) {
+  rcu_periph_clock_enable(RCU_GPIOA);
+	rcu_periph_clock_enable(RCU_GPIOC);
+  gpio_init(GPIOA, GPIO_MODE_IPD, GPIO_OSPEED_50MHZ, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_6);
+  gpio_init(GPIOC, GPIO_MODE_IPD, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
+}

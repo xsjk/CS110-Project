@@ -1,5 +1,4 @@
-#ifndef __UTILS_H
-#define __UTILS_H
+#pragma once
 
 #define BOARD_VER 1 /*fill in your board version here. i.e. 0 or 1*/
 
@@ -29,9 +28,10 @@
 #define BUTTON_1 GPIO_PIN_6
 #define BUTTON_2 GPIO_PIN_7
 
+#define BOOT_0 GPIO_PIN_8
+
 #endif
 
+void button_init(void);
 int Get_Button(int ch);
 int Get_BOOT0(void);
-
-#endif

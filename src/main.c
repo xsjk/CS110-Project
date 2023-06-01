@@ -1,15 +1,17 @@
 #include <string.h>
-#include "utils.h"
-#include "mylcd.h"
+#include "button.h"
+#include "lcd.h"
 #include "color.h"
 #include "assets.h"
 #include "display.h"
 #include "game_display.h"
 #include "font.h"
+#include "gd32vf103_gpio.h"
 
 int main(void)
 {
     lcd_init();        // init LCD
+    button_init();
 
     gameInitialize(1);
     // for( int i = 0; i < NUM_COLS; i++ )
@@ -32,35 +34,35 @@ int main(void)
     showString(60,25,"TEST",WHITE);
     refresh();
 
-    // while (1)
-    // {
-    //     // LCD_ShowLogo();
-    //     // LCD_Clear(BLACK);
-    //     showString(60,25,"TEST",WHITE);
-    //     // if (Get_Button(JOY_LEFT))
-    //     // {
-    //     //     LCD_ShowString(5,25,"L", BLUE);
-    //     //     //continue;
-    //     // }
-    //     // if (Get_Button(JOY_DOWN))
-    //     // {
-    //     //     LCD_ShowString(25,45,"D", BLUE);
-    //     // }
-    //     // LCD_ShowString(5,5,"U:INOP",RED);
-    //     if (Get_Button(JOY_RIGHT))
-    //     {
-    //         fillArea(80, 40, 160, 80, YELLOW);
-    //     }
-    //     if (Get_Button(JOY_CTR))
-    //     {
-    //         // LCD_ShowString(25,25,"C", BLUE);
-    //         fillArea(80, 40, 160, 80, RED);
-    //     }
-    //     // if (Get_Button(BUTTON_1))
-    //     // {
-    //     //     LCD_ShowString(60,5,"SW1", BLUE);
-    //     // }
-    //     // LCD_ShowString(60,45,"SW2:INOP",RED);
-    //     refresh();
-    // }
+    while (1)
+    {
+        showString(60,25,"TEST",WHITE);
+        if (Get_Button(JOY_LEFT))
+        {
+            showString(25,25,"L", BLUE);
+            //continue;
+        }
+        if (Get_Button(JOY_DOWN))
+        {
+            showString(25,25,"D", BLUE);
+        }
+        showString(5,5,"U:INOP",RED);
+        if (Get_Button(JOY_RIGHT))
+        {
+            showString(25,25,"R", BLUE);
+        }
+        if (Get_Button(JOY_CTR))
+        {
+            showString(25,25,"C", BLUE);
+        }
+        if (Get_Button(BUTTON_1))
+        {
+            showString(25,25,"SW1", BLUE);
+        }
+        if (Get_Button(BOOT_0))
+        {
+            showString(25,25,"B", BLUE);
+        }
+        refresh();
+    }
 }

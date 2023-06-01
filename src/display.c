@@ -2,7 +2,7 @@
 #include "assets.h"
 #include "font.h"
 #include <stdio.h>
-#include "mylcd.h"
+#include "lcd.h"
 
 volatile uint16_t framebuffer[LCD_SIZE];
 
