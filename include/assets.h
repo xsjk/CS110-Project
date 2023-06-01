@@ -11,12 +11,11 @@
 #define NUM_ROWS (LCD_H/IMAGE_HEIGHT)
 #define NUM_COLS (LCD_W/IMAGE_WIDTH)
 
-#define IMAGE_COUNT 6
+#define IMAGE_COUNT 5
 
-#define CST 0
-#define GK 1
-#define CAGE 2
-#define GK_IN_CAGE 3
-#define WALL 4
-#define TREE 5
+#define IMG_CST 0
+#define IMG_GK 1
+#define IMG_CAGE 2
+#define IMG_GK_IN_CAGE 3
+#define IMG_TREE 4
 extern const uint16_t images[IMAGE_COUNT][IMAGE_SIZE];

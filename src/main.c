@@ -28,15 +28,15 @@ int main(void)
     // YOUR CODE HERE
     for( int i = 0; i < NUM_COLS; i++ )
     {
-        drawBlock(2, i, TREE);
-        drawBlock(4, i, TREE);
-        drawBlock(6, i, TREE);
+        drawBlock(2, i, IMG_TREE);
+        drawBlock(4, i, IMG_TREE);
+        drawBlock(6, i, IMG_TREE);
     }
-    drawBlock(3, 1, CST);
-    drawBlock(3, 2, GK);
-    drawBlock(3, 3, CAGE);
-    drawBlock(5, 2, CST);
-    drawBlock(5, 3, GK_IN_CAGE);
+    drawBlock(3, 1, IMG_CST);
+    drawBlock(3, 2, IMG_GK);
+    drawBlock(3, 3, IMG_CAGE);
+    drawBlock(5, 2, IMG_CST);
+    drawBlock(5, 3, IMG_GK_IN_CAGE);
     LCD_ShowPicture(0,0,160-1,80-1);
     // lcd_write_u16(0, 0, 160, 80, framebuffer);
 
