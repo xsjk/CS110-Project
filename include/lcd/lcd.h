@@ -16,6 +16,7 @@
 #define LCD_H 80
 #endif
 
+#define LCD_SIZE (LCD_W*LCD_H)
 
 // #define LED_ON gpio_bit_reset(GPIOC,GPIO_PIN_13)
 // #define LED_OFF gpio_bit_set(GPIOC,GPIO_PIN_13)
@@ -78,7 +79,7 @@
 #define OLED_DATA 1	//Write data
 
 extern uint16_t BACK_COLOR;   //Background color
-extern uint16_t image[12800];
+extern uint16_t framebuffer[LCD_SIZE];
 
 void LCD_Writ_Bus(uint8_t dat);
 void LCD_WR_DATA8(uint8_t dat);

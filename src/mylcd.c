@@ -7,7 +7,7 @@
 #define spi_wait_idle()     do { while (SPI_STAT(SPI0) & SPI_STAT_TRANS); } while(0)
 #define spi_wait_tbe()      do { while (!(SPI_STAT(SPI0) & SPI_STAT_TBE)); } while(0)
 #define spi_wait_rbne()     do { while (!(SPI_STAT(SPI0) & SPI_STAT_RBNE)); } while(0)
-#define dma_wait_recv()     do { while (DMA_CHCNT(DMA0, DMA_CH1); } while(0)
+#define dma_wait_recv()     do { while (DMA_CHCNT(DMA0, DMA_CH1)); } while(0)
 #define lcd_mode_cmd()      do { gpio_bit_reset(GPIOB, GPIO_PIN_0); } while(0)
 #define lcd_mode_data()     do { gpio_bit_set  (GPIOB, GPIO_PIN_0); } while(0)
 #define lcd_cs_enable()     do { gpio_bit_reset(GPIOB, GPIO_PIN_2); } while(0)

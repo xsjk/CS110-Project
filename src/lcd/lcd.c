@@ -2,7 +2,7 @@
 #include "lcd/oledfont.h"
 #include "lcd/bmp.h"
 uint16_t BACK_COLOR;   //Background color
-uint16_t image[12800];
+uint16_t framebuffer[LCD_SIZE];
 
 /******************************************************************************
        Function description: LCD serial data write function
@@ -143,7 +143,7 @@ void dma_config(void)
     dma_struct_para_init(&dma_init_struct);
 
     dma_init_struct.periph_addr  = (uint32_t)&SPI_DATA(SPI0);
-    dma_init_struct.memory_addr  = (uint32_t)image;
+    dma_init_struct.memory_addr  = (uint32_t)framebuffer;
     dma_init_struct.direction    = DMA_MEMORY_TO_PERIPHERAL;
     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
@@ -657,9 +657,9 @@ void LCD_ShowPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 	int i;
 	LCD_Address_Set(x1,y1,x2,y2);
-	for(i=0;i<12800;i++)
+	for(i=0;i<LCD_SIZE;i++)
 	{ 	
-		LCD_WR_DATA(image[i]);
+		LCD_WR_DATA(framebuffer[i]);
 	}			
 }
 

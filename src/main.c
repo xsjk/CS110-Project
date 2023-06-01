@@ -2,6 +2,9 @@
 #include <string.h>
 #include "utils.h"
 #include "mylcd.h"
+#include "color.h"
+#include "assets.h"
+#include "display.h"
 
 void Inp_init(void)
 {
@@ -21,19 +24,21 @@ void IO_init(void)
 int main(void)
 {
     IO_init();         // init OLED
-    lcd_init();        // init LCD
+    // lcd_init();        // init LCD
     // YOUR CODE HERE
-    for (int i=0; i<40; i++) {
-        for (int j=80; j<160; j++) {
-            RGB565 color;
-            color.r = 0b0;
-            color.g = 0b111111;
-            color.b = 0b11111;
-            image[i*LCD_W+j] = color.c;
-        }
+    for( int i = 0; i < NUM_COLS; i++ )
+    {
+        drawBlock(2, i, TREE);
+        drawBlock(4, i, TREE);
+        drawBlock(6, i, TREE);
     }
-    // LCD_ShowPicture(0,0,160-1,80-1);
-    lcd_write_u16(0, 0, 160, 80, image);
+    drawBlock(3, 1, CST);
+    drawBlock(3, 2, GK);
+    drawBlock(3, 3, CAGE);
+    drawBlock(5, 2, CST);
+    drawBlock(5, 3, GK_IN_CAGE);
+    LCD_ShowPicture(0,0,160-1,80-1);
+    // lcd_write_u16(0, 0, 160, 80, framebuffer);
 
 
     while (1)
