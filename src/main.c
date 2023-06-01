@@ -28,41 +28,59 @@ int main(void)
     // fillArea(80, 40, 160, 80, GREEN);
     // refresh();
 
-    
+
 
     // drawBoard();
-    showString(60,25,"TEST",WHITE);
+    // showString(60,25,"TEST",WHITE);
     refresh();
 
     while (1)
     {
-        showString(60,25,"TEST",WHITE);
         if (Get_Button(JOY_LEFT))
         {
-            showString(25,25,"L", BLUE);
-            //continue;
+            if (gameMoveCST(RIGHT)) {
+                drawBoard();
+                showString(25,25,"WIN", BLUE);
+                refresh();
+                break;
+            }
         }
         if (Get_Button(JOY_DOWN))
         {
-            showString(25,25,"D", BLUE);
+            if (gameMoveCST(UP)) {
+                drawBoard();
+                showString(25,25,"WIN", BLUE);
+                refresh();
+                break;
+            }
         }
-        showString(5,5,"U:INOP",RED);
         if (Get_Button(JOY_RIGHT))
         {
-            showString(25,25,"R", BLUE);
+            if (gameMoveCST(LEFT)) {
+                drawBoard();
+                showString(25,25,"WIN", BLUE);
+                refresh();
+                break;
+            }
         }
         if (Get_Button(JOY_CTR))
         {
-            showString(25,25,"C", BLUE);
+            if (gameMoveCST(DOWN)) {
+                drawBoard();
+                showString(25,25,"WIN", BLUE);
+                refresh();
+                break;
+            }
         }
-        if (Get_Button(BUTTON_1))
-        {
-            showString(25,25,"SW1", BLUE);
-        }
-        if (Get_Button(BOOT_0))
-        {
-            showString(25,25,"B", BLUE);
-        }
+        // if (Get_Button(BUTTON_1))
+        // {
+        //     showString(25,25,"SW1", BLUE);
+        // }
+        // if (Get_Button(BOOT_0))
+        // {
+        //     showString(25,25,"B", BLUE);
+        // }
+        drawBoard();
         refresh();
     }
 }
