@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define LCD_W 160
 #define LCD_H 80
@@ -141,7 +142,7 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color);
  * @param mode Mode `1` superimposed mode `0` non-superimposed mode
  * @param color The color of the character
 */
-void showChar(uint8_t x, uint8_t y, char c, uint8_t mode, uint16_t color);
+void showChar(uint8_t x, uint8_t y, char c, bool mode, uint16_t color);
 
 
 /**

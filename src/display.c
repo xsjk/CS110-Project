@@ -15,7 +15,7 @@ void drawBlock(int i, int j, int imageID) {
 }
 
 void refresh(void) {
-    lcd_write_u16(0, 0, 160, 80, (void*)framebuffer);
+    lcd_write_u16(0, 0, 160, 80, (void *)framebuffer);
 }
 
 void clear(void) {
@@ -97,34 +97,26 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color) {
 }
 
 
-void showChar(uint8_t x, uint8_t y, char c, uint8_t mode, uint16_t color) {
+void showChar(uint8_t x, uint8_t y, char c, bool mode, uint16_t color) {
     uint8_t temp;
-    uint8_t pos;
-    uint8_t x0 = x;
-    if (x > LCD_W - 16 || y > LCD_H - 16)return;	    //Settings window		   
-    c = c - ' ';//Get offset value
+    int num = c - ' ';
     if (!mode) {
         //Non-overlapping
-        for (pos = 0;pos < 16;pos++) {
-            temp = asc2_1608[c][pos];		 //Call 1608 font
-            for (int t = 0;t < 8;t++) {
-                if (temp & 0x01)
-                    drawPoint(x + t, y + pos, color);//Draw a dot  
-                else
-                    drawPoint(x + t, y + pos, 0);
+        for (int pos = 0; pos < 16; pos++) {
+            temp = asc2_1608[num][pos];
+            for (int t = 0; t < 8; t++) {
+                drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), temp & 1 ? color : 0);
                 temp >>= 1;
-                x++;
             }
-            x = x0;
-            y++;
         }
     }
     else {
         //overlapping mode
-        for (pos = 0;pos < 16;pos++) {
-            temp = asc2_1608[c][pos];		 //Call 1608 font
-            for (int t = 0;t < 8;t++) {
-                if (temp & 0x01) drawPoint(x + t, y + pos, color);//Draw a dot   
+        for (int pos = 0; pos < 16; pos++) {
+            temp = asc2_1608[num][pos];
+            for (int t = 0; t < 8; t++) {
+                if (temp & 1)
+                    drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), color);
                 temp >>= 1;
             }
         }

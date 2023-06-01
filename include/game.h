@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gd32vf103.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 #define BOARD_HEIGHT 10
 #define BOARD_WIDTH 20

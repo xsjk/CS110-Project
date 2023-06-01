@@ -5,6 +5,7 @@
 #include "assets.h"
 #include "display.h"
 #include "game_display.h"
+#include "font.h"
 
 int main(void)
 {
@@ -27,38 +28,39 @@ int main(void)
 
     
 
-    drawBoard();
+    // drawBoard();
+    showString(60,25,"TEST",WHITE);
     refresh();
 
-    while (1)
-    {
-        // LCD_ShowLogo();
-        // LCD_Clear(BLACK);
-        // LCD_ShowString(60,25,"TEST",WHITE);
-        // if (Get_Button(JOY_LEFT))
-        // {
-        //     LCD_ShowString(5,25,"L", BLUE);
-        //     //continue;
-        // }
-        // if (Get_Button(JOY_DOWN))
-        // {
-        //     LCD_ShowString(25,45,"D", BLUE);
-        // }
-        // LCD_ShowString(5,5,"U:INOP",RED);
-        if (Get_Button(JOY_RIGHT))
-        {
-            fillArea(80, 40, 160, 80, YELLOW);
-        }
-        if (Get_Button(JOY_CTR))
-        {
-            // LCD_ShowString(25,25,"C", BLUE);
-            fillArea(80, 40, 160, 80, RED);
-        }
-        // if (Get_Button(BUTTON_1))
-        // {
-        //     LCD_ShowString(60,5,"SW1", BLUE);
-        // }
-        // LCD_ShowString(60,45,"SW2:INOP",RED);
-        refresh();
-    }
+    // while (1)
+    // {
+    //     // LCD_ShowLogo();
+    //     // LCD_Clear(BLACK);
+    //     showString(60,25,"TEST",WHITE);
+    //     // if (Get_Button(JOY_LEFT))
+    //     // {
+    //     //     LCD_ShowString(5,25,"L", BLUE);
+    //     //     //continue;
+    //     // }
+    //     // if (Get_Button(JOY_DOWN))
+    //     // {
+    //     //     LCD_ShowString(25,45,"D", BLUE);
+    //     // }
+    //     // LCD_ShowString(5,5,"U:INOP",RED);
+    //     if (Get_Button(JOY_RIGHT))
+    //     {
+    //         fillArea(80, 40, 160, 80, YELLOW);
+    //     }
+    //     if (Get_Button(JOY_CTR))
+    //     {
+    //         // LCD_ShowString(25,25,"C", BLUE);
+    //         fillArea(80, 40, 160, 80, RED);
+    //     }
+    //     // if (Get_Button(BUTTON_1))
+    //     // {
+    //     //     LCD_ShowString(60,5,"SW1", BLUE);
+    //     // }
+    //     // LCD_ShowString(60,45,"SW2:INOP",RED);
+    //     refresh();
+    // }
 }

@@ -17,6 +17,7 @@ void drawBoard(void) {
                 CASE(GK_IN_CAGE)
                 CASE(CST_ON_CAGE)
                 CASE(TREE)
+                case BLANK: break;
             }
         }
 }
