@@ -31,7 +31,6 @@
 
 #endif
 
-
 int Get_Button(int ch);
 int Get_BOOT0(void);
 

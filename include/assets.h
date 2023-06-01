@@ -2,8 +2,7 @@
 
 
 #include <stdint.h>
-#include <lcd/lcd.h>
-#include "game.h"
+#include <display.h>
 
 #define IMAGE_WIDTH 8
 #define IMAGE_HEIGHT 8

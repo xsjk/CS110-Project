@@ -1,4 +1,3 @@
-#include "lcd/lcd.h"
 #include <string.h>
 #include "utils.h"
 #include "mylcd.h"
@@ -6,25 +5,9 @@
 #include "assets.h"
 #include "display.h"
 
-void Inp_init(void)
-{
-	rcu_periph_clock_enable(RCU_GPIOA);
-	rcu_periph_clock_enable(RCU_GPIOC);
-
-    gpio_init(GPIOA, GPIO_MODE_IPD, GPIO_OSPEED_50MHZ, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_6);
-    gpio_init(GPIOC, GPIO_MODE_IPD, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
-}
-
-void IO_init(void)
-{
-    Inp_init(); // inport init
-    Lcd_Init(); // LCD init
-}
-
 int main(void)
 {
-    IO_init();         // init OLED
-    // lcd_init();        // init LCD
+    lcd_init();        // init LCD
     // YOUR CODE HERE
     for( int i = 0; i < NUM_COLS; i++ )
     {
@@ -37,8 +20,8 @@ int main(void)
     drawBlock(3, 3, IMG_CAGE);
     drawBlock(5, 2, IMG_CST);
     drawBlock(5, 3, IMG_GK_IN_CAGE);
-    LCD_ShowPicture(0,0,160-1,80-1);
-    // lcd_write_u16(0, 0, 160, 80, framebuffer);
+    fillArea(80, 40, 160, 80, GREEN);
+    refresh();
 
 
     while (1)
