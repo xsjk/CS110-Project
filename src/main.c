@@ -39,18 +39,20 @@ int main(void)
         //     LCD_ShowString(25,45,"D", BLUE);
         // }
         // LCD_ShowString(5,5,"U:INOP",RED);
-        // if (Get_Button(JOY_RIGHT))
-        // {
-        //     LCD_ShowString(45,25,"R", BLUE);
-        // }
-        // if (Get_Button(JOY_CTR))
-        // {
-        //     LCD_ShowString(25,25,"C", BLUE);
-        // }
+        if (Get_Button(JOY_RIGHT))
+        {
+            fillArea(80, 40, 160, 80, YELLOW);
+        }
+        if (Get_Button(JOY_CTR))
+        {
+            // LCD_ShowString(25,25,"C", BLUE);
+            fillArea(80, 40, 160, 80, RED);
+        }
         // if (Get_Button(BUTTON_1))
         // {
         //     LCD_ShowString(60,5,"SW1", BLUE);
         // }
         // LCD_ShowString(60,45,"SW2:INOP",RED);
+        refresh();
     }
 }
