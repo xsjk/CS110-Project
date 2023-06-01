@@ -77,8 +77,8 @@
 #define OLED_CMD  0	//Write command
 #define OLED_DATA 1	//Write data
 
-extern  uint16_t BACK_COLOR;   //Background color
-extern unsigned char image[12800];
+extern uint16_t BACK_COLOR;   //Background color
+extern uint16_t image[12800];
 
 void LCD_Writ_Bus(uint8_t dat);
 void LCD_WR_DATA8(uint8_t dat);

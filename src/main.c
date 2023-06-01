@@ -1,6 +1,7 @@
 #include "lcd/lcd.h"
 #include <string.h>
 #include "utils.h"
+#include "mylcd.h"
 
 void Inp_init(void)
 {
@@ -20,10 +21,24 @@ void IO_init(void)
 int main(void)
 {
     IO_init();         // init OLED
+    lcd_init();        // init LCD
     // YOUR CODE HERE
+    for (int i=0; i<40; i++) {
+        for (int j=80; j<160; j++) {
+            RGB565 color;
+            color.r = 0b0;
+            color.g = 0b111111;
+            color.b = 0b11111;
+            image[i*LCD_W+j] = color.c;
+        }
+    }
+    // LCD_ShowPicture(0,0,160-1,80-1);
+    lcd_write_u16(0, 0, 160, 80, image);
+
+
     while (1)
     {
-        LCD_ShowLogo();
+        // LCD_ShowLogo();
         // LCD_Clear(BLACK);
         // LCD_ShowString(60,25,"TEST",WHITE);
         // if (Get_Button(JOY_LEFT))

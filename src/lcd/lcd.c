@@ -2,7 +2,7 @@
 #include "lcd/oledfont.h"
 #include "lcd/bmp.h"
 uint16_t BACK_COLOR;   //Background color
-
+uint16_t image[12800];
 
 /******************************************************************************
        Function description: LCD serial data write function
@@ -659,8 +659,7 @@ void LCD_ShowPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 	LCD_Address_Set(x1,y1,x2,y2);
 	for(i=0;i<12800;i++)
 	{ 	
-		// LCD_WR_DATA8(image[i*2+1]);
-		LCD_WR_DATA8(image[i]);
+		LCD_WR_DATA(image[i]);
 	}			
 }
 
