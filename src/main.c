@@ -4,25 +4,31 @@
 #include "color.h"
 #include "assets.h"
 #include "display.h"
+#include "game_display.h"
 
 int main(void)
 {
     lcd_init();        // init LCD
-    // YOUR CODE HERE
-    for( int i = 0; i < NUM_COLS; i++ )
-    {
-        drawBlock(2, i, IMG_TREE);
-        drawBlock(4, i, IMG_TREE);
-        drawBlock(6, i, IMG_TREE);
-    }
-    drawBlock(3, 1, IMG_CST);
-    drawBlock(3, 2, IMG_GK);
-    drawBlock(3, 3, IMG_CAGE);
-    drawBlock(5, 2, IMG_CST);
-    drawBlock(5, 3, IMG_GK_IN_CAGE);
-    fillArea(80, 40, 160, 80, GREEN);
-    refresh();
 
+    gameInitialize(1);
+    // for( int i = 0; i < NUM_COLS; i++ )
+    // {
+    //     drawBlock(2, i, IMG_TREE);
+    //     drawBlock(4, i, IMG_TREE);
+    //     drawBlock(6, i, IMG_TREE);
+    // }
+    // drawBlock(3, 1, IMG_CST);
+    // drawBlock(3, 2, IMG_GK);
+    // drawBlock(3, 3, IMG_CAGE);
+    // drawBlock(5, 2, IMG_CST);
+    // drawBlock(5, 3, IMG_GK_IN_CAGE);
+    // fillArea(80, 40, 160, 80, GREEN);
+    // refresh();
+
+    
+
+    drawBoard();
+    refresh();
 
     while (1)
     {
