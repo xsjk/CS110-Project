@@ -8,13 +8,12 @@ uint64_t lastPressed[] = {0, 0, 0, 0, 0, 0};
  Description: Return 1 if button number ch is pressed
                           Return 0 otherwise
 ----------------------------- */
-int getButtonRaw(int ch) {
- /* hack for new board*/
+static inline int getButtonRaw(int ch) {
   return (gpio_input_bit_get(ch != GPIO_PIN_13 ? GPIOA : GPIOC, ch));
 }
 
 // getButtonRaw with debouncing
-int Get_Button(int ch) {
+int getButton(int ch) {
   uint64_t time = get_timer_value() / 4000;
   if (getButtonRaw(ch)) {
     if (ch == JOY_LEFT && time - lastPressed[0] > DELAY) {
@@ -38,13 +37,6 @@ int Get_Button(int ch) {
   }
   return 0;
 }
-
-/* -----------------------------
- Description: Return 1 if button BOOT0 ch is pressed
-                          Return 0 otherwise
------------------------------ */
-int Get_BOOT0(void) { return (int)(gpio_input_bit_get(GPIOA, GPIO_PIN_8)); }
-
 
 void button_init(void) {
   rcu_periph_clock_enable(RCU_GPIOA);

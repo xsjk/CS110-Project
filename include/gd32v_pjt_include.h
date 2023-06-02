@@ -1,5 +1,4 @@
-#ifndef _GD32V_PJT_INCLUDE_
-#define _GD32V_PJT_INCLUDE_
+#pragma once
 
 #include "gd32vf103_libopt.h"
 #include <stdio.h>
@@ -25,5 +24,3 @@
 #define LEDG(s)     PA_OUT(1, s)
 #define LEDB_TOG    gpio_bit_write(GPIOA, GPIO_PIN_2, (bit_status)(1-gpio_input_bit_get(GPIOA, GPIO_PIN_2)))
 #define LEDB(s)     PA_OUT(2, s)
-
-#endif /* _GD32V_PJT_INCLUDE_ */

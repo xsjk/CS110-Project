@@ -3,8 +3,9 @@
 #include "font.h"
 #include <stdio.h>
 #include "lcd.h"
+#include "string.h"
 
-volatile uint16_t framebuffer[LCD_SIZE];
+uint16_t framebuffer[LCD_SIZE];
 
 void drawBlock(int i, int j, int imageID) {
     for (int ii = 0; ii < IMAGE_HEIGHT; ii++) {
@@ -19,7 +20,26 @@ void refresh(void) {
 }
 
 void clear(void) {
-    fillAll(0);
+    // for (int y = 0; y < LCD_H; y++)
+    //     for (int x = 0; x < LCD_W; x++)
+    //         // drawPoint(x, y, RED);
+    //         framebuffer[y * LCD_W + x] = RED;
+    // for (int i = 0; i < sizeof(framebuffer)/sizeof(*framebuffer); i++) 
+    //     framebuffer[i] = RED;
+
+    memset(framebuffer, 0, sizeof(framebuffer));
+}
+
+void displayScore(int score) {
+    char str[21];
+    sprintf(str, "%20d", score);
+    drawString(0, 0, str, WHITE);
+}
+
+void diplsayLevel(int level) {
+    char str[15];
+    sprintf(str, "Level: %d", level);
+    drawString(0, 10, str, WHITE);
 }
 
 /**************************************************************/
@@ -30,9 +50,9 @@ void drawPoint(uint8_t x, uint8_t y, uint16_t color) {
 
 
 void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, uint16_t color) {
-    for (int x = xsta; x < xend; x++)
-        for (int y = ysta; y < yend; y++)
-            drawPoint(x, y, color);
+    for (uint8_t y = ysta; y < yend; y++)
+        for (uint8_t x = xsta; x < xend; x++)
+            drawPoint(x, y, RED);
 }
 
 void fillAll(uint16_t color) {
@@ -97,54 +117,40 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color) {
 }
 
 
-void showChar(uint8_t x, uint8_t y, char c, bool mode, uint16_t color) {
-    uint8_t temp;
+void drawChar(uint8_t x, uint8_t y, char c, uint16_t color) {
     int num = c - ' ';
-    if (!mode) {
-        //Non-overlapping
-        for (int pos = 0; pos < 16; pos++) {
-            temp = asc2_1608[num][pos];
-            for (int t = 0; t < 8; t++) {
-                drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), temp & 1 ? color : 0);
-                temp >>= 1;
-            }
-        }
-    }
-    else {
-        //overlapping mode
-        for (int pos = 0; pos < 16; pos++) {
-            temp = asc2_1608[num][pos];
-            for (int t = 0; t < 8; t++) {
-                if (temp & 1)
-                    drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), color);
-                temp >>= 1;
-            }
+    for (int pos = 0; pos < 16; pos++) {
+        uint8_t temp = asc2_1608[num][pos];
+        for (int t = 0; t < 8; t++) {
+            if (temp & 1)
+                drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), color);
+            temp >>= 1;
         }
     }
 }
 
 
 
-void showString(uint8_t x, uint8_t y, const char *p, uint16_t color) {
+void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color) {
     while (*p != '\0') {
-        if (x > LCD_W - 16) { x = 0;y += 16; }
+        if (x > LCD_W - 8) { x = 0;y += 16; }
         if (y > LCD_H - 16) { y = x = 0; fillAll(RED); }
-        showChar(x, y, *p, 0, color);
+        drawChar(x, y, *p, color);
         x += 8;
         p++;
     }
 }
 
 
-void showInt(uint8_t x, uint8_t y, int num, uint16_t color) {
+void drawInt(uint8_t x, uint8_t y, int num, uint16_t color) {
     char str[10];
     sprintf(str, "%d", num);
-    showString(x, y, str, color);
+    drawString(x, y, str, color);
 }
 
 
-void showFloat(uint8_t x, uint8_t y, float num, uint16_t color) {
+void drawFloat(uint8_t x, uint8_t y, float num, uint16_t color) {
     char str[10];
     sprintf(str, "%f", num);
-    showString(x, y, str, color);
+    drawString(x, y, str, color);
 }

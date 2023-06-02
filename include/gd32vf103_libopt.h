@@ -32,8 +32,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32VF103_LIBOPT_H
-#define GD32VF103_LIBOPT_H
+#pragma once
 
 #include "gd32vf103_adc.h"
 #include "gd32vf103_bkp.h"
@@ -57,5 +56,3 @@ OF SUCH DAMAGE.
 #include "gd32vf103_usart.h"
 #include "gd32vf103_wwdgt.h"
 #include "n200_func.h"
-
-#endif /* GD32VF103_LIBOPT_H */

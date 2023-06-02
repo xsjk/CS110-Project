@@ -21,3 +21,10 @@ void drawBoard(void) {
             }
         }
 }
+
+void displayWelcome(void) {
+    clear();
+    drawString(60, 25, "Welcome!", WHITE);
+    refresh();
+}
+
