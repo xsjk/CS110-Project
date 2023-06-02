@@ -5,11 +5,36 @@
 typedef struct {
     Perspective perspective;
     View view;
+    Mat4 mat;
 } Camera;
 
+extern Camera camera;
 
-Camera make_camera(float zoom, float aspect);
-Mat4 camera_mat(Camera* cam);
+/**
+ * @brief Set the zoom and aspect of the camera
+ * @param zoom the zoom of the camera
+ */
+void set_camera(float zoom);
 
-Vec3 camera_to_world(Camera* cam, Vec3 v);
-Vec3 world_to_camera(Camera* cam, Vec3 v);
+
+/**
+ * @brief Set the view of the camera
+ * @param eye the position of the camera
+ * @param front the direction the camera is facing
+*/
+void set_view(Vec3 eye, Vec3 front);
+
+
+/**
+ * @brief Transform a vector from camera space to world space
+ * @param v 
+ * @return Vec3 
+ */
+Vec3 camera_to_world(Vec3 v);
+
+/**
+ * @brief Transform a vector from world space to camera space
+ * @param v 
+ * @return Vec3
+ */
+Vec3 world_to_camera(Vec3 v);

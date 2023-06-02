@@ -49,8 +49,8 @@ Perspective make_perspective(float fov, float aspect, float near, float far) {
     result.mat.m[0][0] = 1.f / (aspect * tanHalfFovy);
     result.mat.m[1][1] = 1.f / (tanHalfFovy);
     result.mat.m[2][2] = -(far + near) / (far - near);
-    result.mat.m[2][3] = -1.f;
-    result.mat.m[3][2] = -(2 * far * near) / (far - near);
+    result.mat.m[3][2] = -1.f;
+    result.mat.m[2][3] = -(2 * far * near) / (far - near);
     return result;
 }
 

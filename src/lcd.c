@@ -240,7 +240,7 @@ void lcd_init(void)
     g_fbEnabled  = 0;
 }
 
-void lcd_clear(uint16_t color)
+void lcd_clear(Color color)
 {
     if (g_fbEnabled)
         return;
@@ -250,7 +250,7 @@ void lcd_clear(uint16_t color)
     dma_send_const_u16(color, LCD_W * LCD_H);
 }
 
-void lcd_setpixel(int x, int y, unsigned short int color)
+void lcd_setpixel(int x, int y, Color color)
 {
     if (g_fbEnabled)
         return;
@@ -261,7 +261,7 @@ void lcd_setpixel(int x, int y, unsigned short int color)
     lcd_u8c(color);
 }
 
-void lcd_fill_rect(int x, int y, int w, int h, uint16_t color)
+void lcd_fill_rect(int x, int y, int w, int h, Color color)
 {
     if (g_fbEnabled)
         return;
@@ -271,7 +271,7 @@ void lcd_fill_rect(int x, int y, int w, int h, uint16_t color)
     dma_send_const_u16(color, w*h);
 }
 
-void lcd_rect(int x, int y, int w, int h, uint16_t color)
+void lcd_rect(int x, int y, int w, int h, Color color)
 {
     if (g_fbEnabled)
         return;

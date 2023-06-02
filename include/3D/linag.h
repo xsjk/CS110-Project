@@ -34,7 +34,6 @@ typedef union {
     float m[4][4];
 } Mat4;
                
-Vec3 vec3_zero();
 Vec3 vec3_add(Vec3 a, Vec3 b);
 Vec3 vec3_sub(Vec3 a, Vec3 b);
 Vec3 vec3_scale(Vec3 a, float b);
@@ -49,12 +48,10 @@ Mat3 mat3_scale(Mat3 m, float s);
 float mat3_det(Mat3 m);
 Mat3 mat3_inverse(Mat3 m);
 Mat3 mat3_mul(Mat3 a, Mat3 b);
-Vec3 mat3_transform(Vec3 a, Mat3 m);
 
 Vec4 vec4_add(Vec4 a, Vec4 b);
 Vec4 vec4_sub(Vec4 a, Vec4 b);
 Vec4 vec4_scale(Vec4 a, float b);
-Vec4 vec4_transform(Vec4 a, Mat4 m);
 
 Mat4 mat4_identity();
 Mat4 mat4_scale(Mat4 m, float s);
@@ -62,8 +59,11 @@ float mat4_det(Mat4 m);
 
 Mat4 mat4_inverse(Mat4 m);
 Mat4 mat4_mul(Mat4 a, Mat4 b);
-Vec3 mat4_transform(Vec3 a, Mat4 m);
 
 
 Vec3 vec3_from_vec4(Vec4 v);
 Vec4 vec4_from_vec3(Vec3 v);
+
+Vec3 mat3_mul_vec3(Mat3 m, Vec3 v);
+Vec4 mat4_mul_vec4(Mat4 m, Vec4 v);
+Vec3 mat4_transform(Vec3 a, Mat4 m);

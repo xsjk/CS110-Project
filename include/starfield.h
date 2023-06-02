@@ -13,14 +13,15 @@ uint32_t jenkins_mix(uint32_t a);
 
 // Random number generator based on Jenkins hash.
 
-static uint32_t g_rnd_state;
 uint32_t rnd_u32(void);
 
 typedef struct {
     int16_t x, y, z, p;
 } Star;
 
-enum { NUM_STARS = 400 };
-Star g_stars[NUM_STARS];
+enum { NUM_STARS = 300 };
+extern Star g_stars[NUM_STARS];
 
 void update_star(Star* v, int delta);
+
+void update_stars(void);

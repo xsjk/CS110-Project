@@ -9,6 +9,8 @@
 #include "font.h"
 #include "gd32vf103_gpio.h"
 #include "gui.h"
+#include "3D/object.h"
+#include "starfield.h"
 
 GuiMode guiMode = StartMode;
 
@@ -20,41 +22,70 @@ void guiMainLoop(void) {
          {-1, -1, -1} ,
          {-1, -1, -1}
     };
+
+    lcd_fb_setaddr(framebuffer);
+    
+    // Initial stars.
+    for (int i=0; i < NUM_STARS; i++)
+    {
+        g_stars[i].x = rnd_u32();
+        g_stars[i].y = rnd_u32();
+        g_stars[i].z = rnd_u32();
+        g_stars[i].p = -1;
+    }
+
     while (1) {
+
+        
+        // Enable continuous framebuffer update.
+
         switch (guiMode) {
             case StartMode:
-                clear();
+
+                lcd_fb_enable();
+                update_stars();
                 drawString(30, 30, "START MODE", WHITE);
-                if (getButton(BUTTON_1))
+
+                if (getButton(BUTTON_1)) {
                     guiMode = LevelSelectMode;
+                    clear();
+                }
                 break;
             case LevelSelectMode:
-                clear();
+
+                lcd_fb_enable();
+                update_stars();
+                drawStringCenter(10, "Easy", selectedLevel == 0 ? RED : YELLOW);
+                drawStringCenter(30, "Medium", selectedLevel == 1 ? RED : YELLOW);
+                drawStringCenter(50, "Hard", selectedLevel == 2 ? RED : YELLOW);
+
+                
                 if (getButton(JOY_RIGHT))
                     selectedLevel = (selectedLevel + 2) % 3;
                 else if (getButton(JOY_LEFT))
                     selectedLevel = (selectedLevel + 1) % 3;
                 else if (getButton(BUTTON_1)) {
                     guiMode = BoxesSelectMode;
+                    clear();
                 }
-                drawStringCenter(10, "Easy", selectedLevel == 0 ? RED : YELLOW);
-                drawStringCenter(30, "Medium", selectedLevel == 1 ? RED : YELLOW);
-                drawStringCenter(50, "Hard", selectedLevel == 2 ? RED : YELLOW);
                 break;
             case BoxesSelectMode:
-                clear();
+            
+                lcd_fb_enable();
+                update_stars();
+                drawStringCenter(10, "1 Boxes", selectedBoxes == 0 ? RED : YELLOW);
+                drawStringCenter(30, "2 Boxes", selectedBoxes == 1 ? RED : YELLOW);
+                drawStringCenter(50, "3 Boxes", selectedBoxes == 2 ? RED : YELLOW);
+
                 if (getButton(JOY_RIGHT))
                     selectedBoxes = (selectedBoxes + 2) % 3;
                 else if (getButton(JOY_LEFT))
                     selectedBoxes = (selectedBoxes + 1) % 3;
                 else if (getButton(BUTTON_1)) {
                     gameInitialize(selectedLevel + 1, selectedBoxes + 1);
-                    drawBoard();
+                    lcd_fb_disable();
                     guiMode = GameMode;
                 }
-                drawStringCenter(10, "1 Boxes", selectedBoxes == 0 ? RED : YELLOW);
-                drawStringCenter(30, "2 Boxes", selectedBoxes == 1 ? RED : YELLOW);
-                drawStringCenter(50, "3 Boxes", selectedBoxes == 2 ? RED : YELLOW);
                 break;
             case GameMode:
                 if (getButton(JOY_LEFT)) {
@@ -75,6 +106,9 @@ void guiMainLoop(void) {
                 }
                 drawBoard();
                 displaySteps(gameState.step);
+
+                refresh();
+
                 break;
             // case PushingMode:
             //     break;
@@ -83,6 +117,9 @@ void guiMainLoop(void) {
                 drawString(LCD_W - 3 * 8, 50, "Win", YELLOW);
                 if (getButton(BUTTON_1))
                     guiMode = HighScoreMode;
+
+                refresh();
+                
                 break;
             case HighScoreMode:
                 clear();
@@ -106,9 +143,11 @@ void guiMainLoop(void) {
                     // reset seleceted level and boxes
                     selectedLevel = 0;
                     selectedBoxes = 0;
+                    clear();
                 }
+                refresh();
+
                 break;
         }
-        refresh();
     }
 }

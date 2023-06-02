@@ -5,14 +5,18 @@
 #include "lcd.h"
 #include "string.h"
 
-uint16_t framebuffer[LCD_SIZE];
+Color framebuffer[LCD_SIZE];
+// Depth zbuffer[LCD_SIZE];
+
+void drawImage(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color* img) {
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++)
+            framebuffer[(y + i) * LCD_W + (x + j)] = img[i * w + j];
+    }
+}
 
 void drawBlock(int i, int j, int imageID) {
-    for (int ii = 0; ii < IMAGE_HEIGHT; ii++) {
-        for (int jj = 0; jj < IMAGE_WIDTH; jj++) {
-            framebuffer[(i * IMAGE_HEIGHT + ii) * LCD_W + (j * IMAGE_WIDTH + jj)] = images[imageID][ii * IMAGE_WIDTH + jj];
-        }
-    }
+    drawImage(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT, blockImage[imageID]);
 }
 
 void refresh(void) {
@@ -44,22 +48,22 @@ void diplsayLevel(int level) {
 
 /**************************************************************/
 
-void drawPoint(uint8_t x, uint8_t y, uint16_t color) {
+void drawPoint(uint8_t x, uint8_t y, Color color) {
     framebuffer[y * LCD_W + x] = color;
 }
 
 
-void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, uint16_t color) {
+void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, Color color) {
     for (uint8_t y = ysta; y < yend; y++)
         for (uint8_t x = xsta; x < xend; x++)
             drawPoint(x, y, RED);
 }
 
-void fillAll(uint16_t color) {
+void fillAll(Color color) {
     fillArea(0, 0, LCD_W, LCD_H, color);
 }
 
-void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color) {
+void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color) {
     int xerr = 0, yerr = 0, distance;
     int incx, incy, uRow, uCol;
     int delta_x = x2 - x1;
@@ -90,7 +94,7 @@ void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color) {
 }
 
 
-void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color) {
+void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color) {
     drawLine(x1, y1, x2, y1, color);
     drawLine(x1, y1, x1, y2, color);
     drawLine(x1, y2, x2, y2, color);
@@ -99,7 +103,7 @@ void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t colo
 
 
 
-void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color) {
+void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, Color color) {
     int a = 0, b = r;
     while (a <= b) {
         drawPoint(x0 - b, y0 - a, color);             //3
@@ -117,7 +121,7 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color) {
 }
 
 
-void drawChar(uint8_t x, uint8_t y, char c, uint16_t color) {
+void drawChar(uint8_t x, uint8_t y, char c, Color color) {
     int num = c - ' ';
     for (int pos = 0; pos < 16; pos++) {
         uint8_t temp = asc2_1608[num][pos];
@@ -131,7 +135,7 @@ void drawChar(uint8_t x, uint8_t y, char c, uint16_t color) {
 
 
 
-void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color) {
+void drawString(uint8_t x, uint8_t y, const char *p, Color color) {
     while (*p != '\0') {
         if (x > LCD_W - 8) { x = 0;y += 16; }
         if (y > LCD_H - 16) { y = x = 0; fillAll(RED); }

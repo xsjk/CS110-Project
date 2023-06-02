@@ -16,11 +16,13 @@
 // conditions between DMA and CPU accessing the data.
 // ------------------------------------------------------------------------
 
+#include "color.h"
+
 void lcd_init       (void);
-void lcd_clear      (unsigned short int color);                                 // All colors are RGB565.
-void lcd_setpixel   (int x, int y, unsigned short int color);
-void lcd_fill_rect  (int x, int y, int w, int h, unsigned short int color);
-void lcd_rect       (int x, int y, int w, int h, unsigned short int color);
+void lcd_clear      (Color color);                                 // All colors are RGB565.
+void lcd_setpixel   (int x, int y, Color color);
+void lcd_fill_rect  (int x, int y, int w, int h, Color color);
+void lcd_rect       (int x, int y, int w, int h, Color color);
 void lcd_write_u16  (int x, int y, int w, int h, const void* buffer);           // Buffer size = w*h*2 bytes.
 void lcd_wait       (void);                                                     // Wait until previous operation is complete.
 

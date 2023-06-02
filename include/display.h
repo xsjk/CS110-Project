@@ -1,14 +1,16 @@
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include "color.h"
 
 #define LCD_W 160
 #define LCD_H 80
 #define LCD_SIZE (LCD_W * LCD_H)
 
-extern uint16_t framebuffer[LCD_SIZE];
-
+extern Color framebuffer[LCD_SIZE];
+typedef uint8_t Depth;
+// extern Depth zbuffer[LCD_SIZE];
+#define DEPTH_MAX ((Depth)(-1))
 
 //Brush color
 #define WHITE         	 0xFFFF
@@ -33,7 +35,15 @@ extern uint16_t framebuffer[LCD_SIZE];
 #define LGRAYBLUE        0XA651
 #define LBBLUE           0X2B12
 
-
+/**
+ * @brief Draw a image of the specified size at the specified position.
+ * @param x The x coordinate of the starting point.
+ * @param y The y coordinate of the starting point.
+ * @param w The width of the image.
+ * @param h The height of the image.
+ * @param img The pointer to the image.
+*/
+void drawImage(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color *img);
 
 /**
  * @brief Draws a block of a given ID at a given position.
@@ -75,7 +85,7 @@ void displayLevel(int level);
  * @param y The y coordinate of the point.
  * @param color The color of the point.
  */
-void drawPoint(uint8_t x, uint8_t y, uint16_t color);
+void drawPoint(uint8_t x, uint8_t y, Color color);
 
 
 /**
@@ -86,14 +96,14 @@ void drawPoint(uint8_t x, uint8_t y, uint16_t color);
  * @param yend The y coordinate of the ending point.
  * @param color The color to be filled.
 */
-void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, uint16_t color);
+void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, Color color);
 
 
 /**
  * @brief Fill the screen with certain color
  * @param color The color to fill
 */
-void fillAll(uint16_t color);
+void fillAll(Color color);
 
 
 /**
@@ -104,7 +114,7 @@ void fillAll(uint16_t color);
  * @param y1 The y coordinate of the ending point
  * @param color The color of the line.
 */
-void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color);
+void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color);
 
 
 /**
@@ -115,7 +125,7 @@ void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color);
  * @param y1 The y coordinate of the ending point
  * @param color The color of the rectangle.
 */
-void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color);
+void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color);
 
 
 /**
@@ -125,7 +135,7 @@ void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t colo
  * @param r The radius of the circle
  * @param color The color of the circle
 */
-void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color);
+void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, Color color);
 
 
 /**
@@ -135,7 +145,7 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color);
  * @param c The character to display
  * @param color The color of the character
 */
-void drawChar(uint8_t x, uint8_t y, char c, uint16_t color);
+void drawChar(uint8_t x, uint8_t y, char c, Color color);
 
 
 /**
@@ -145,7 +155,7 @@ void drawChar(uint8_t x, uint8_t y, char c, uint16_t color);
  * @param p The pointer of the string to be displayed
  * @param color The color of the text
 */
-void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color);
+void drawString(uint8_t x, uint8_t y, const char *p, Color color);
 
 
 /**
@@ -164,7 +174,7 @@ void drawStringCenter(uint8_t y, const char *p, uint16_t color);
  * @param num The integer to be displayed
  * @param color The color of the text
 */
-void drawInt(uint8_t x, uint8_t y, int num, uint16_t color);
+void drawInt(uint8_t x, uint8_t y, int num, Color color);
 
 
 /**
@@ -183,5 +193,5 @@ void drawIntCenter(uint8_t y, int num, uint16_t color);
  * @param num The float to be displayed
  * @param color The color of the text
 */
-void drawFloat(uint8_t x, uint8_t y, float num, uint16_t color);
+void drawFloat(uint8_t x, uint8_t y, float num, Color color);
 

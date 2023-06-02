@@ -3,15 +3,16 @@
 #include <stdint.h>
 #include <display.h>
 #include "game.h"
+#include "color.h"
 
-#define IMAGE_WIDTH 8
-#define IMAGE_HEIGHT 8
-#define IMAGE_SIZE (IMAGE_WIDTH*IMAGE_HEIGHT)
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 8
+#define BLOCK_SIZE (BLOCK_WIDTH*BLOCK_HEIGHT)
 
-#define NUM_ROWS (LCD_H/IMAGE_HEIGHT)
-#define NUM_COLS (LCD_W/IMAGE_WIDTH)
+#define NUM_ROWS (LCD_H/BLOCK_HEIGHT)
+#define NUM_COLS (LCD_W/BLOCK_WIDTH)
 
-#define IMAGE_COUNT 6
+#define BLOCK_TYPES 6
 
 #define IMG_CST 0
 #define IMG_GK 1
@@ -19,7 +20,8 @@
 #define IMG_GK_IN_CAGE 3
 #define IMG_CST_ON_CAGE 4
 #define IMG_TREE 5
-extern const uint16_t images[IMAGE_COUNT][IMAGE_SIZE];
+
+extern const Color blockImage[BLOCK_TYPES][BLOCK_SIZE];
 
 extern const GameState gameLevel1_1, gameLevel1_2, gameLevel1_3,
                        gameLevel2_1, gameLevel2_2, gameLevel2_3,
