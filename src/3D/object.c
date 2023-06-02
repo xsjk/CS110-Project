@@ -1,9 +1,7 @@
 #include "3D/object.h"
 #include "3D/camera.h"
 #include "display.h"
-
-#define abs(x) ((x) > 0 ? (x) : -(x))  
-#define max(x, y) ((x) > (y) ? (x) : (y))
+#include "defines.h"
 
 
 void drawPoint3D(Point3D point, Color color) {

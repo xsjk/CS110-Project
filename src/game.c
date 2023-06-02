@@ -1,6 +1,7 @@
 #include "game.h"
 #include "assets.h"
 #include "string.h"
+#include "game_display.h"
 
 GameState gameState;
 
@@ -17,6 +18,8 @@ void gameInitialize(uint8_t level, uint8_t boxes) {
     CASE(3, 2)
     CASE(3, 3)
 }
+
+#undef CASE
 
 // deal with different cst move scenario
 void moveCST(uint8_t nextRow, uint8_t nextCol, bool nextPosIsCAGE) {
@@ -37,15 +40,21 @@ bool checkWin(void) {
 }
 
 bool gameMoveCST(Action action) {
+    
+
     uint8_t cstNextRow = action == UP ? gameState.cstRow - 1 : action == DOWN ? gameState.cstRow + 1 : gameState.cstRow,
             cstNextCol = action == LEFT ? gameState.cstCol - 1 : action == RIGHT ? gameState.cstCol + 1 : gameState.cstCol;
-    if (gameState.board[cstNextRow][cstNextCol] == TREE)
+    if (gameState.board[cstNextRow][cstNextCol] == TREE) {
+        registerPushAnimation(STOP);
         return false;
+    }
     if (gameState.board[cstNextRow][cstNextCol] == BLANK) {
+        registerPushAnimation(action);
         moveCST(cstNextRow, cstNextCol, false);
         return false;
     }
     if (gameState.board[cstNextRow][cstNextCol] == CAGE) {
+        registerPushAnimation(action);
         moveCST(cstNextRow, cstNextCol, true);
         return false;
     }
@@ -53,14 +62,18 @@ bool gameMoveCST(Action action) {
         bool nextPosIsCAGE = gameState.board[cstNextRow][cstNextCol] == GK_IN_CAGE;
         uint8_t cstNextNextRow = 2 * cstNextRow - gameState.cstRow,
                 cstNextNextCol = 2 * cstNextCol - gameState.cstCol;
-        if (gameState.board[cstNextNextRow][cstNextNextCol] == GK || gameState.board[cstNextNextRow][cstNextNextCol] == GK_IN_CAGE || gameState.board[cstNextNextRow][cstNextNextCol] == TREE)
+        if (gameState.board[cstNextNextRow][cstNextNextCol] == GK || gameState.board[cstNextNextRow][cstNextNextCol] == GK_IN_CAGE || gameState.board[cstNextNextRow][cstNextNextCol] == TREE) {
+            registerPushAnimation(STOP);
             return false;
+        }
         if (gameState.board[cstNextNextRow][cstNextNextCol] == BLANK) {
+            registerPushAnimation(action);
             gameState.board[cstNextNextRow][cstNextNextCol] = GK;
             moveCST(cstNextRow, cstNextCol, nextPosIsCAGE);
             return false;
         }
         else if (gameState.board[cstNextNextRow][cstNextNextCol] == CAGE) {
+            registerPushAnimation(action);
             gameState.board[cstNextNextRow][cstNextNextCol] = GK_IN_CAGE;
             moveCST(cstNextRow, cstNextCol, nextPosIsCAGE);
             return nextPosIsCAGE ? false : checkWin();

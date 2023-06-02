@@ -46,6 +46,19 @@ typedef uint8_t Depth;
 void drawImage(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color *img);
 
 /**
+ * @brief Draw a image with mask
+ * @param x 
+ * @param y 
+ * @param w 
+ * @param h 
+ * @param img 
+ * @param mask each bit represent whether this pixel is not transparent
+ * @note the mask int uint64_t and only support 64bit img for the time being
+ */
+void drawImageMask(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color *img, uint64_t mask);
+
+
+/**
  * @brief Draws a block of a given ID at a given position.
  * @param i The row of the block.
  * @param j The column of the block.

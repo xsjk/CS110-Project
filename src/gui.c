@@ -11,10 +11,15 @@
 #include "gui.h"
 #include "3D/object.h"
 #include "starfield.h"
+#include "systick.h"
 
-GuiMode guiMode = StartMode;
+GuiMode mode = StartMode;
 
-void guiMainLoop(void) {
+
+
+
+void mainloop(void) {
+
     uint8_t selectedLevel = 0, selectedBoxes = 0;
     // initially all best steps are very large
     uint8_t bestSteps[3][3] = {
@@ -22,6 +27,8 @@ void guiMainLoop(void) {
          {-1, -1, -1} ,
          {-1, -1, -1}
     };
+
+    bool isWin = false;
 
     lcd_fb_setaddr(framebuffer);
 
@@ -39,7 +46,7 @@ void guiMainLoop(void) {
 
         // Enable continuous framebuffer update.
 
-        switch (guiMode) {
+        switch (mode) {
             case StartMode:
 
                 lcd_fb_enable();
@@ -48,10 +55,11 @@ void guiMainLoop(void) {
                 drawStringCenter(40, "BRO", YELLOW);
 
                 if (getButton(BUTTON_1)) {
-                    guiMode = LevelSelectMode;
+                    mode = LevelSelectMode;
                     clear();
                 }
                 break;
+
             case LevelSelectMode:
 
                 lcd_fb_enable();
@@ -60,17 +68,21 @@ void guiMainLoop(void) {
                 drawStringCenter(30, "Medium", selectedLevel == 1 ? RED : YELLOW);
                 drawStringCenter(50, "Hard", selectedLevel == 2 ? RED : YELLOW);
 
-
                 if (getButton(JOY_RIGHT))
                     selectedLevel = (selectedLevel + 2) % 3;
                 else if (getButton(JOY_LEFT))
                     selectedLevel = (selectedLevel + 1) % 3;
                 else if (getButton(BUTTON_1)) {
-                    guiMode = BoxesSelectMode;
+                    mode = BoxesSelectMode;
+                    clear();
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = StartMode;
                     clear();
                 }
 
                 break;
+
             case BoxesSelectMode:
 
                 lcd_fb_enable();
@@ -84,62 +96,77 @@ void guiMainLoop(void) {
                 else if (getButton(JOY_LEFT))
                     selectedBoxes = (selectedBoxes + 1) % 3;
                 else if (getButton(BUTTON_1)) {
-                    gameInitialize(selectedLevel + 1, selectedBoxes + 1);
-                    lcd_fb_disable();
-                    guiMode = GameMode;
+                    mode = GameStartMode;
                 }
                 else if (getButton(BOOT_0)) {
-                    guiMode = LevelSelectMode;
+                    mode = LevelSelectMode;
                     clear();
                 }
                 break;
+
+            case GameStartMode:
+
+                gameInitialize(selectedLevel + 1, selectedBoxes + 1);
+                lcd_fb_disable();
+                mode = GameMode;
+                break;
+
             case GameMode:
 
                 clear();
-
-                if (getButton(JOY_LEFT)) {
-                    if (gameMoveCST(RIGHT))
-                        guiMode = GameWonMode;
-                }
-                else if (getButton(JOY_DOWN)) {
-                    if (gameMoveCST(UP))
-                        guiMode = GameWonMode;
-                }
-                else if (getButton(JOY_RIGHT)) {
-                    if (gameMoveCST(LEFT))
-                        guiMode = GameWonMode;
-                }
-                else if (getButton(JOY_CTR)) {
-                    if (gameMoveCST(DOWN))
-                        guiMode = GameWonMode;
-                }
-                else if (getButton(BOOT_0)) {
-                    guiMode = BoxesSelectMode;
-                    break;
-                }
-
                 drawBoard();
                 displaySteps(gameState.step);
                 refresh();
+                
+
+                if (getButton(JOY_LEFT)) {
+                    mode = PushAnimation;
+                    isWin = gameMoveCST(RIGHT);
+                }
+                else if (getButton(JOY_DOWN)) {
+                    mode = PushAnimation;
+                    isWin = gameMoveCST(UP);
+                }
+                else if (getButton(JOY_RIGHT)) {
+                    mode = PushAnimation;
+                    isWin = gameMoveCST(LEFT);
+                }
+                else if (getButton(JOY_CTR)) {
+                    mode = PushAnimation;
+                    isWin = gameMoveCST(DOWN);
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = BoxesSelectMode;
+                    clear();
+                    break;
+                }
+            
 
                 break;
-            // case PushingMode:
-            //     break;
+
+            case PushAnimation:
+
+                if (moveUpdate()) 
+                    /* the animation is done */
+                    mode = isWin ? GameWonMode : GameMode;
+                
+                refresh();
+                break;
+
             case GameWonMode:
 
                 drawString(LCD_W - 3 * 8, 30, "You", YELLOW);
                 drawString(LCD_W - 3 * 8, 50, "Win", YELLOW);
 
                 if (getButton(BUTTON_1)) {
-                    guiMode = HighScoreMode;
+                    mode = HighScoreMode;
                     clear();
                 }
-                if (getButton(BOOT_0)) {
-                    gameInitialize(selectedLevel + 1, selectedBoxes + 1);
-                    guiMode = GameMode;
-                }
+                if (getButton(BOOT_0))
+                    mode = GameStartMode;
 
                 break;
+
             case HighScoreMode:
 
                 lcd_fb_enable();
@@ -160,7 +187,7 @@ void guiMainLoop(void) {
                 if (getButton(BUTTON_1)) {
                     // put best steps update here so that the new record can be always displayed
                     bestSteps[selectedLevel][selectedBoxes] = gameState.step;
-                    guiMode = StartMode;
+                    mode = StartMode;
                     // reset seleceted level and boxes
                     selectedLevel = 0;
                     selectedBoxes = 0;

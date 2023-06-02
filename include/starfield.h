@@ -1,9 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-
-#define rot(x,k) (((x)<<(k)) | ((x)>>(32-(k))))
-#define swap(a,b) do { a+=b; b=a-b; a-=b; } while(0)
+#include "defines.h"
 
 uint32_t jenkins_mix_3(uint32_t a, uint32_t b, uint32_t c);
 

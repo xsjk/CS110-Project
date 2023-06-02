@@ -11,7 +11,15 @@ Color framebuffer[LCD_SIZE];
 void drawImage(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color* img) {
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++)
-            framebuffer[(y + i) * LCD_W + (x + j)] = img[i * w + j];
+            drawPoint(x + j, y + i, img[i * w + j]);
+    }
+}
+
+void drawImageMask(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color *img, uint64_t mask) {
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++)
+            if ((mask >> (i * w + j)) & 1)
+                drawPoint(x + j, y + i, img[i * w + j]);
     }
 }
 
@@ -56,7 +64,7 @@ void drawPoint(uint8_t x, uint8_t y, Color color) {
 void fillArea(uint8_t xsta, uint8_t ysta, uint8_t xend, uint8_t yend, Color color) {
     for (uint8_t y = ysta; y < yend; y++)
         for (uint8_t x = xsta; x < xend; x++)
-            drawPoint(x, y, RED);
+            drawPoint(x, y, color);
 }
 
 void fillAll(Color color) {

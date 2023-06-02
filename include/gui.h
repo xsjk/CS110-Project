@@ -5,13 +5,14 @@ typedef enum {
     StartMode,
     LevelSelectMode,
     BoxesSelectMode,
+    GameStartMode,
     GameMode,
-    PushingMode,
+    PushAnimation,
     GameWonMode,
     HighScoreMode,
 } GuiMode;
 
-extern GuiMode guiMode;
+extern GuiMode mode;
 
 // main loop of thie project
-void guiMainLoop(void);
+void mainloop(void);
