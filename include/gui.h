@@ -3,9 +3,13 @@
 
 typedef enum {
     StartMode,
+    MenuMode,
     GameMode,
     PushingMode,
-    MenuMode,
     GameWonMode,
     HighScoreMode,
 } GuiMode;
+
+extern GuiMode guiMode;
+
+void guiUpdate(void);
