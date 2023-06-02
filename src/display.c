@@ -158,6 +158,13 @@ void drawInt(uint8_t x, uint8_t y, int num, uint16_t color) {
 }
 
 
+void drawIntCenter(uint8_t y, int num, uint16_t color) {
+    char str[10];
+    sprintf(str, "%d", num);
+    drawStringCenter(y, str, color);
+}
+
+
 void drawFloat(uint8_t x, uint8_t y, float num, uint16_t color) {
     char str[10];
     sprintf(str, "%f", num);

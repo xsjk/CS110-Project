@@ -168,6 +168,15 @@ void drawInt(uint8_t x, uint8_t y, int num, uint16_t color);
 
 
 /**
+ * @brief Display integer in center (vertically)
+ * @param y The y coordinate of the starting point
+ * @param num The integer to be displayed
+ * @param color The color of the text
+*/
+void drawIntCenter(uint8_t y, int num, uint16_t color);
+
+
+/**
  * @brief Display float
  * @param x The x coordinate of the starting point
  * @param y The y coordinate of the starting point

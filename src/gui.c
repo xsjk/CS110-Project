@@ -14,6 +14,12 @@ GuiMode guiMode = StartMode;
 
 void guiMainLoop(void) {
     uint8_t selectedLevel = 0, selectedBoxes = 0;
+    // initially all best steps are very large
+    uint8_t bestSteps[3][3] = {
+         {-1, -1, -1} ,
+         {-1, -1, -1} ,
+         {-1, -1, -1}
+    };
     while (1) {
         switch (guiMode) {
             case StartMode:
@@ -45,9 +51,6 @@ void guiMainLoop(void) {
                     gameInitialize(selectedLevel + 1, selectedBoxes + 1);
                     drawBoard();
                     guiMode = GameMode;
-                    // reset these two before entering GameMode so next time we select level and boxes, they are 0 by default
-                    selectedLevel = 0;
-                    selectedBoxes = 0;
                 }
                 drawStringCenter(10, "1 Boxes", selectedBoxes == 0 ? RED : YELLOW);
                 drawStringCenter(30, "2 Boxes", selectedBoxes == 1 ? RED : YELLOW);
@@ -82,9 +85,27 @@ void guiMainLoop(void) {
                 break;
             case HighScoreMode:
                 clear();
-                drawString(30, 30, "HIGHSCORE MODE", WHITE);
-                if (getButton(BUTTON_1))
+                char str[20];
+                sprintf(str, "Level %d, %d Boxes", selectedLevel + 1, selectedBoxes + 1);
+                drawStringCenter(10, str, WHITE);
+                if (bestSteps[selectedLevel][selectedBoxes] > gameState.step) {
+                    drawStringCenter(30, "NEW RECORD!", RED);
+                    drawIntCenter(50, gameState.step, YELLOW);
+                }
+                else {
+                    sprintf(str, "RECORD STEPS: %d", bestSteps[selectedLevel][selectedBoxes]);
+                    drawStringCenter(30, str, WHITE);
+                    sprintf(str, "YOUR STEPS: %d", gameState.step);
+                    drawStringCenter(50, str, WHITE);
+                }
+                if (getButton(BUTTON_1)) {
+                    // put best steps update here so that the new record can be always displayed
+                    bestSteps[selectedLevel][selectedBoxes] = gameState.step;
                     guiMode = StartMode;
+                    // reset seleceted level and boxes
+                    selectedLevel = 0;
+                    selectedBoxes = 0;
+                }
                 break;
         }
         refresh();
