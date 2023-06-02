@@ -12,8 +12,8 @@ extern uint16_t framebuffer[LCD_SIZE];
 
 //Brush color
 #define WHITE         	 0xFFFF
-#define BLACK         	 0x0000	  
-#define BLUE           	 0x001F  
+#define BLACK         	 0x0000
+#define BLUE           	 0x001F
 #define BRED             0XF81F
 #define GRED 			 0XFFE0
 #define GBLUE			 0X07FF
@@ -146,6 +146,16 @@ void drawChar(uint8_t x, uint8_t y, char c, uint16_t color);
  * @param color The color of the text
 */
 void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color);
+
+
+/**
+ * @brief Display string in center (vertically)
+ * @param y The y coordinate of the starting point
+ * @param p The pointer of the string to be displayed
+ * @param color The color of the text
+*/
+void drawStringCenter(uint8_t y, const char *p, uint16_t color);
+
 
 /**
  * @brief Display integer

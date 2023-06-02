@@ -37,19 +37,19 @@ void guiMainLoop(void) {
                 }
                 switch (selectedLevel) {
                     case 0:
-                        drawString(60, 10, "Easy", RED);
-                        drawString(50, 30, "Medium", YELLOW);
-                        drawString(60, 50, "Hard", YELLOW);
+                        drawStringCenter(10, "Easy", RED);
+                        drawStringCenter(30, "Medium", YELLOW);
+                        drawStringCenter(50, "Hard", YELLOW);
                         break;
                     case 1:
-                        drawString(60, 10, "Easy", YELLOW);
-                        drawString(50, 30, "Medium", RED);
-                        drawString(60, 50, "Hard", YELLOW);
+                        drawStringCenter(10, "Easy", YELLOW);
+                        drawStringCenter(30, "Medium", RED);
+                        drawStringCenter(50, "Hard", YELLOW);
                         break;
                     case 2:
-                        drawString(60, 10, "Easy", YELLOW);
-                        drawString(50, 30, "Medium", YELLOW);
-                        drawString(60, 50, "Hard", RED);
+                        drawStringCenter(10, "Easy", YELLOW);
+                        drawStringCenter(30, "Medium", YELLOW);
+                        drawStringCenter(50, "Hard", RED);
                         break;
                 }
                 break;

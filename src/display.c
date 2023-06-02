@@ -24,7 +24,7 @@ void clear(void) {
     //     for (int x = 0; x < LCD_W; x++)
     //         // drawPoint(x, y, RED);
     //         framebuffer[y * LCD_W + x] = RED;
-    // for (int i = 0; i < sizeof(framebuffer)/sizeof(*framebuffer); i++) 
+    // for (int i = 0; i < sizeof(framebuffer)/sizeof(*framebuffer); i++)
     //     framebuffer[i] = RED;
 
     memset(framebuffer, 0, sizeof(framebuffer));
@@ -102,13 +102,13 @@ void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t colo
 void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color) {
     int a = 0, b = r;
     while (a <= b) {
-        drawPoint(x0 - b, y0 - a, color);             //3           
-        drawPoint(x0 + b, y0 - a, color);             //0           
-        drawPoint(x0 - a, y0 + b, color);             //1                
-        drawPoint(x0 - a, y0 - b, color);             //2             
-        drawPoint(x0 + b, y0 + a, color);             //4               
+        drawPoint(x0 - b, y0 - a, color);             //3
+        drawPoint(x0 + b, y0 - a, color);             //0
+        drawPoint(x0 - a, y0 + b, color);             //1
+        drawPoint(x0 - a, y0 - b, color);             //2
+        drawPoint(x0 + b, y0 + a, color);             //4
         drawPoint(x0 + a, y0 - b, color);             //5
-        drawPoint(x0 + a, y0 + b, color);             //6 
+        drawPoint(x0 + a, y0 + b, color);             //6
         drawPoint(x0 - b, y0 + a, color);             //7
         a++;
         if ((a * a + b * b) > (r * r))
@@ -140,6 +140,15 @@ void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color) {
         p++;
     }
 }
+
+
+
+void drawStringCenter(uint8_t y, const char *p, uint16_t color) {
+    char str[21];
+    sprintf(str, "%*s%s", (20 - strlen(p)) / 2, "", p);
+    drawString(0, y, str, color);
+}
+
 
 
 void drawInt(uint8_t x, uint8_t y, int num, uint16_t color) {
