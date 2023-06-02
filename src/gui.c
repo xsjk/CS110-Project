@@ -30,6 +30,8 @@ void mainloop(void) {
 
     bool isWin = false;
 
+    GuiMode next_mode;
+
     lcd_fb_setaddr(framebuffer);
 
     // Initial stars.
@@ -47,6 +49,16 @@ void mainloop(void) {
         // Enable continuous framebuffer update.
 
         switch (mode) {
+
+            case StartModeFadeIn:
+
+                lcd_fb_enable();
+                update_stars();
+                if (startModeFadeInUpdate())
+                    mode = StartMode;
+                break;
+
+
             case StartMode:
 
                 lcd_fb_enable();
@@ -55,10 +67,42 @@ void mainloop(void) {
                 drawStringCenter(40, "BRO", YELLOW);
 
                 if (getButton(BUTTON_1)) {
-                    mode = LevelSelectMode;
-                    clear();
+                    mode = StartModeFadeOut;
+                    next_mode = LevelSelectModeFadeIn;
                 }
                 break;
+
+            case StartModeFadeOut:
+
+                lcd_fb_enable();
+                update_stars();
+                if (startModeFadeOutUpdate()) {
+                    mode = next_mode;
+                }
+                break;
+
+            case LevelSelectModeFadeIn:
+
+                lcd_fb_enable();
+                update_stars();
+                if (levelSelectModeFadeInUpdate(selectedLevel))
+                    mode = LevelSelectMode;
+                
+                if (getButton(JOY_RIGHT))
+                    selectedLevel = (selectedLevel + 2) % 3;
+                else if (getButton(JOY_LEFT))
+                    selectedLevel = (selectedLevel + 1) % 3;
+                else if (getButton(BUTTON_1)) {
+                    mode = LevelSelectModeFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = StartMode;
+                    next_mode = StartModeFadeIn;
+                }
+
+                break;
+
 
             case LevelSelectMode:
 
@@ -73,14 +117,45 @@ void mainloop(void) {
                 else if (getButton(JOY_LEFT))
                     selectedLevel = (selectedLevel + 1) % 3;
                 else if (getButton(BUTTON_1)) {
-                    mode = BoxesSelectMode;
-                    clear();
+                    mode = LevelSelectModeFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
                 }
                 else if (getButton(BOOT_0)) {
-                    mode = StartMode;
-                    clear();
+                    mode = LevelSelectModeFadeOut;
+                    next_mode = StartModeFadeIn;
                 }
 
+                break;
+
+            case LevelSelectModeFadeOut:
+
+                lcd_fb_enable();
+                update_stars();
+                if (levelSelectModeFadeOutUpdate(selectedLevel)) {
+                    mode = next_mode;
+                }
+                break;
+
+            case BoxesSelectModeFadeIn:
+
+                lcd_fb_enable();
+                update_stars();
+                if (boxesSelectModeFadeInUpdate(selectedBoxes))
+                    mode = BoxesSelectMode;
+                
+                if (getButton(JOY_RIGHT))
+                    selectedBoxes = (selectedBoxes + 2) % 3;
+                else if (getButton(JOY_LEFT))
+                    selectedBoxes = (selectedBoxes + 1) % 3;
+                else if (getButton(BUTTON_1)) {
+                    mode = BoxesSelectModeFadeOut;
+                    next_mode = GameModeStart;
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = BoxesSelectModeFadeOut;
+                    next_mode = LevelSelectModeFadeIn;
+                    clear();
+                }
                 break;
 
             case BoxesSelectMode:
@@ -96,29 +171,47 @@ void mainloop(void) {
                 else if (getButton(JOY_LEFT))
                     selectedBoxes = (selectedBoxes + 1) % 3;
                 else if (getButton(BUTTON_1)) {
-                    mode = GameStartMode;
+                    mode = BoxesSelectModeFadeOut;
+                    next_mode = GameModeStart;
                 }
                 else if (getButton(BOOT_0)) {
-                    mode = LevelSelectMode;
+                    mode = BoxesSelectModeFadeOut;
+                    next_mode = LevelSelectModeFadeIn;
                     clear();
                 }
                 break;
 
-            case GameStartMode:
+            case BoxesSelectModeFadeOut:
+
+                lcd_fb_enable();
+                update_stars();
+                if (boxesSelectModeFadeOutUpdate(selectedBoxes)) {
+                    mode = next_mode;
+                }
+                break;
+
+
+            case GameModeStart:
 
                 gameInitialize(selectedLevel + 1, selectedBoxes + 1);
-                lcd_fb_disable();
-                mode = GameMode;
+                mode = GameModeFadeIn;
+                break;
+
+            case GameModeFadeIn:
+
+                lcd_fb_enable();
+                update_stars();
+                if (gameModeFadeInUpdate()) {
+                    lcd_fb_disable();
+                    mode = GameMode;
+                }
                 break;
 
             case GameMode:
 
                 clear();
                 drawBoard();
-                displaySteps(gameState.step);
-                refresh();
                 
-
                 if (getButton(JOY_LEFT)) {
                     mode = PushAnimation;
                     isWin = gameMoveCST(RIGHT);
@@ -136,64 +229,110 @@ void mainloop(void) {
                     isWin = gameMoveCST(DOWN);
                 }
                 else if (getButton(BOOT_0)) {
-                    mode = BoxesSelectMode;
-                    clear();
+                    mode = GameModeFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
                     break;
                 }
-            
+
+                displaySteps(gameState.step);
+                refresh();
 
                 break;
+
+            case GameModeFadeOut:
+
+                lcd_fb_enable();
+                if (gameModeFadeOutUpdate()) {
+                    mode = next_mode;
+                }
+                break;  
 
             case PushAnimation:
 
-                if (moveUpdate()) 
-                    /* the animation is done */
-                    mode = isWin ? GameWonMode : GameMode;
+                if (moveUpdate()) {
+                    if (isWin) {
+                        mode = GameWonModeFadeIn;
+                    }
+                    else {
+                        mode = GameMode;
+                    }
+                }
                 
                 refresh();
                 break;
-
-            case GameWonMode:
-
-                drawString(LCD_W - 3 * 8, 30, "You", YELLOW);
-                drawString(LCD_W - 3 * 8, 50, "Win", YELLOW);
-
-                if (getButton(BUTTON_1)) {
-                    mode = HighScoreMode;
-                    clear();
+            
+            case GameWonModeFadeIn:
+                
+                lcd_fb_enable();
+                if (gameWonModeFadeInUpdate()) {
+                    mode = GameWonModeFadeOut;
                 }
-                if (getButton(BOOT_0))
-                    mode = GameStartMode;
+                if (getButton(BUTTON_1)) {
+                    mode = GameModeFadeOut;
+                    next_mode = HighScoreModeFadeIn;
+                }
+                if (getButton(BOOT_0)) {
+                    mode = GameModeFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
+                }
+                break;
 
+            case GameWonModeFadeOut:
+            
+                lcd_fb_enable();
+                if (gameWonModeFadeOutUpdate()) {
+                    mode = GameWonModeFadeIn;
+                }
+                if (getButton(BUTTON_1)) {
+                    mode = GameModeFadeOut;
+                    next_mode = HighScoreModeFadeIn;
+                }
+                if (getButton(BOOT_0)) {
+                    mode = GameModeFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
+                }
+
+                break;  
+
+            case HighScoreModeFadeIn:
+                
+                lcd_fb_enable();
+                update_stars();
+                if (highScoreModeFadeInUpdate(selectedLevel, selectedBoxes, bestSteps)) {
+                    mode = HighScoreMode;
+                }
                 break;
 
             case HighScoreMode:
 
                 lcd_fb_enable();
                 update_stars();
-                char str[20];
-                sprintf(str, "Level %d, %d Boxes", selectedLevel + 1, selectedBoxes + 1);
-                drawStringCenter(10, str, WHITE);
-                if (bestSteps[selectedLevel][selectedBoxes] > gameState.step) {
-                    drawStringCenter(30, "NEW RECORD!", RED);
-                    drawIntCenter(50, gameState.step, YELLOW);
-                }
-                else {
-                    sprintf(str, "RECORD STEPS: %d", bestSteps[selectedLevel][selectedBoxes]);
-                    drawStringCenter(30, str, WHITE);
-                    sprintf(str, "YOUR STEPS: %d", gameState.step);
-                    drawStringCenter(50, str, WHITE);
-                }
+                highScoreModeUpdate(selectedLevel, selectedBoxes, bestSteps);
+                
                 if (getButton(BUTTON_1)) {
                     // put best steps update here so that the new record can be always displayed
                     bestSteps[selectedLevel][selectedBoxes] = gameState.step;
-                    mode = StartMode;
+                    mode = GameModeFadeOut;
+                    next_mode = LevelSelectModeFadeIn;
+                    
                     // reset seleceted level and boxes
                     selectedLevel = 0;
                     selectedBoxes = 0;
-                    clear();
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = HighScoreModeFadeOut;
+                    next_mode = GameModeFadeIn;
                 }
                 break;
+
+            case HighScoreModeFadeOut:
+                
+                lcd_fb_enable();
+                update_stars();
+                if (highScoreModeFadeOutUpdate(selectedLevel, selectedBoxes, bestSteps)) {
+                    mode = next_mode;
+                }
+                break;  
         }
     }
 }

@@ -23,10 +23,11 @@ void displayWelcome(void);
  */
 bool moveUpdate(void);
 
-/*
-  upper level: img3 -> img4
-  lower level: img0 -> img1 -> img2 
-  block id:   (i, j)
+/**
+ * @brief the struct to hold data for push animation redering
+ * @note upper level: img3 -> img4
+ *       lower level: img0 -> img1 -> img2 
+ *       block id:   (i, j)
 */
 typedef struct {
     Action action;
@@ -43,3 +44,88 @@ extern PushAnimationData pushAnimationData;
  */
 void registerPushAnimation(Action action);
 
+
+/**
+ * @brief update the fade in animation of Start mode
+ * @return true if the animation if finished
+*/
+bool startModeFadeInUpdate(void);
+
+
+/**
+ * @brief update the fade out animation of Start mode
+ * @return true if the animation if finished
+ */
+bool startModeFadeOutUpdate(void);
+
+/**
+ * @brief update the fade in animation of LevelSelect mode
+ * @param level the level to be highlighted
+ * @return true if the animation if finished
+*/
+bool levelSelectModeFadeInUpdate(uint8_t level);
+
+/**
+ * @brief update the fade out animation of LevelSelect mode
+ * @param level the level to be highlighted
+ * @return true if the animation if finished
+*/
+bool levelSelectModeFadeOutUpdate(uint8_t level);
+
+/**
+ * @brief update the fade in animation of BoxesSelect mode
+ * @param num the number of the box to be highlighted
+ * @return true if the animation if finished
+*/
+bool boxesSelectModeFadeInUpdate(uint8_t num);
+
+/**
+ * @brief update the fade out animation of BoxesSelect mode
+ * @param num the number of the box to be highlighted
+ * @return true if the animation if finished
+*/
+bool boxesSelectModeFadeOutUpdate(uint8_t num);
+
+
+/**
+ * @brief update the fade in animation of Game mode
+ * @return true if the animation if finished
+*/
+bool gameModeFadeInUpdate(void);
+
+/**
+ * @brief update the fade out animation of Game mode
+ * @return true if the animation if finished
+*/
+bool gameModeFadeOutUpdate(void);
+
+/**
+ * @brief update the fade in animation of GameWon Mode
+ * @return true if the animation if finished
+*/
+bool gameWonModeFadeInUpdate(void);
+
+/**
+ * @brief update the fade out animation of GameWon Mode
+ * @return true if the animation if finished
+*/
+bool gameWonModeFadeOutUpdate(void);
+
+/**
+ * @brief update the fade in animation of HighScore mode
+ * @return true if the animation if finished
+*/
+bool highScoreModeFadeInUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[3][3]);
+
+
+/**
+ * @brief update the fade in animation of HighScore mode
+ * @return true if the animation if finished
+*/
+bool highScoreModeUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[3][3]);
+
+/**
+ * @brief update the fade out animation of HighScore mode
+ * @return true if the animation if finished
+*/
+bool highScoreModeFadeOutUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[3][3]);

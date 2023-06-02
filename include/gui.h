@@ -2,14 +2,26 @@
 
 
 typedef enum {
+    StartModeFadeIn,
     StartMode,
+    StartModeFadeOut,
+    LevelSelectModeFadeIn,
     LevelSelectMode,
+    LevelSelectModeFadeOut,
+    BoxesSelectModeFadeIn,
     BoxesSelectMode,
-    GameStartMode,
+    BoxesSelectModeFadeOut,
+    GameModeStart,
+    GameModeFadeIn,
     GameMode,
-    PushAnimation,
+    GameModeFadeOut,
+    GameWonModeFadeIn,
     GameWonMode,
+    GameWonModeFadeOut,
+    PushAnimation,
+    HighScoreModeFadeIn,
     HighScoreMode,
+    HighScoreModeFadeOut,
 } GuiMode;
 
 extern GuiMode mode;
