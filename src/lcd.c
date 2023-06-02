@@ -246,8 +246,8 @@ void lcd_clear(uint16_t color)
         return;
 
     lcd_wait();
-    lcd_set_addr(0, 0, LCD_WIDTH, LCD_HEIGHT);
-    dma_send_const_u16(color, LCD_WIDTH * LCD_HEIGHT);
+    lcd_set_addr(0, 0, LCD_W, LCD_H);
+    dma_send_const_u16(color, LCD_W * LCD_H);
 }
 
 void lcd_setpixel(int x, int y, unsigned short int color)
@@ -350,7 +350,7 @@ void DMA0_Channel2_IRQHandler(void)
     if (g_fbEnabled)
     {
         // Restart transmission.
-        lcd_set_addr(0, 0, LCD_WIDTH, LCD_HEIGHT); // Technically not needed?
+        lcd_set_addr(0, 0, LCD_W, LCD_H); // Technically not needed?
         dma_send_u16((const void*)g_fbAddress, LCD_FRAMEBUFFER_PIXELS);
     }
     else
@@ -388,7 +388,7 @@ void lcd_fb_enable(void)
     dma_interrupt_enable(DMA0, DMA_CH2, DMA_INT_FTF);
 
     // Start the first transfer.
-    lcd_set_addr(0, 0, LCD_WIDTH, LCD_HEIGHT);
+    lcd_set_addr(0, 0, LCD_W, LCD_H);
     dma_send_u16((const void*)(g_fbAddress), LCD_FRAMEBUFFER_PIXELS);
 }
 

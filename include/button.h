@@ -33,5 +33,4 @@
 #endif
 
 void button_init(void);
-int Get_Button(int ch);
-int Get_BOOT0(void);
+int getButton(int ch);

@@ -7,7 +7,7 @@
 #define LCD_H 80
 #define LCD_SIZE (LCD_W * LCD_H)
 
-extern volatile uint16_t framebuffer[LCD_SIZE];
+extern uint16_t framebuffer[LCD_SIZE];
 
 
 //Brush color
@@ -22,22 +22,16 @@ extern volatile uint16_t framebuffer[LCD_SIZE];
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //brown
-#define BRRED 			 0XFC07 //maroon
-#define GRAY  			 0X8430 //gray
-//GUI color
-
-#define DARKBLUE      	 0X01CF	//navy blue
-#define LIGHTBLUE      	 0X7D7C	//light blue 
-#define GRAYBLUE       	 0X5458 //gray blue
-//The above three colors are the colors of PANEL
-
-#define LIGHTGREEN     	 0X841F //light green
-#define LGRAY 			     0XC618 //Light gray (PANNEL), form background color
-
-#define LGRAYBLUE        0XA651 //Light gray blue (middle layer color)
-#define LBBLUE           0X2B12 //Light brown blue (inverted color of selected item)
-
+#define BROWN 			 0XBC40
+#define BRRED 			 0XFC07
+#define GRAY  			 0X8430
+#define DARKBLUE      	 0X01CF
+#define LIGHTBLUE      	 0X7D7C
+#define GRAYBLUE       	 0X5458
+#define LIGHTGREEN     	 0X841F
+#define LGRAY 			 0XC618
+#define LGRAYBLUE        0XA651
+#define LBBLUE           0X2B12
 
 
 
@@ -139,10 +133,9 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color);
  * @param x The x coordinate of the starting point
  * @param y The y coordinate of the starting point
  * @param c The character to display
- * @param mode Mode `1` superimposed mode `0` non-superimposed mode
  * @param color The color of the character
 */
-void showChar(uint8_t x, uint8_t y, char c, bool mode, uint16_t color);
+void drawChar(uint8_t x, uint8_t y, char c, uint16_t color);
 
 
 /**
@@ -152,7 +145,7 @@ void showChar(uint8_t x, uint8_t y, char c, bool mode, uint16_t color);
  * @param p The pointer of the string to be displayed
  * @param color The color of the text
 */
-void showString(uint8_t x, uint8_t y, const char *p, uint16_t color);
+void drawString(uint8_t x, uint8_t y, const char *p, uint16_t color);
 
 /**
  * @brief Display integer
@@ -161,7 +154,7 @@ void showString(uint8_t x, uint8_t y, const char *p, uint16_t color);
  * @param num The integer to be displayed
  * @param color The color of the text
 */
-void showInt(uint8_t x, uint8_t y, int num, uint16_t color);
+void drawInt(uint8_t x, uint8_t y, int num, uint16_t color);
 
 
 /**
@@ -171,5 +164,5 @@ void showInt(uint8_t x, uint8_t y, int num, uint16_t color);
  * @param num The float to be displayed
  * @param color The color of the text
 */
-void showFloat(uint8_t x, uint8_t y, float num, uint16_t color);
+void drawFloat(uint8_t x, uint8_t y, float num, uint16_t color);
 

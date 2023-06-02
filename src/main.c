@@ -32,59 +32,61 @@ int main(void)
 
 
     // drawBoard();
-    // showString(60,25,"TEST",WHITE);
+    // drawString(60,25,"TEST",WHITE);
     refresh();
 
     while (1)
     {
-        if (Get_Button(JOY_LEFT))
+        if (getButton(JOY_LEFT))
         {
             if (gameMoveCST(RIGHT)) {
                 drawBoard();
-                showString(25,25,"WIN", BLUE);
+                drawString(25,25,"WIN", BLUE);
                 refresh();
                 break;
             }
         }
-        if (Get_Button(JOY_DOWN))
+        if (getButton(JOY_DOWN))
         {
             if (gameMoveCST(UP)) {
                 drawBoard();
-                showString(25,25,"WIN", BLUE);
+                drawString(25,25,"WIN", BLUE);
                 refresh();
                 break;
             }
         }
-        if (Get_Button(JOY_RIGHT))
+        if (getButton(JOY_RIGHT))
         {
             if (gameMoveCST(LEFT)) {
                 drawBoard();
-                showString(25,25,"WIN", BLUE);
+                drawString(25,25,"WIN", BLUE);
                 refresh();
                 break;
             }
         }
-        if (Get_Button(JOY_CTR))
+        if (getButton(JOY_CTR))
         {
             if (gameMoveCST(DOWN)) {
                 drawBoard();
-                showString(25,25,"WIN", BLUE);
+                drawString(25,25,"WIN", BLUE);
                 refresh();
                 break;
             }
         }
-        // if (Get_Button(BUTTON_1))
+        // if (getButton(BUTTON_1))
         // {
-        //     showString(25,25,"SW1", BLUE);
+        //     drawString(25,25,"SW1", BLUE);
         // }
-        // if (Get_Button(BOOT_0))
+        // if (getButton(BOOT_0))
         // {
-        //     showString(25,25,"B", BLUE);
+        //     drawString(25,25,"B", BLUE);
         // }
         drawBoard();
         char step[10];
         sprintf(step, "%d", gameState.step);
         showString(LCD_W-24,0,step,WHITE);
         refresh();
+        
+
     }
 }

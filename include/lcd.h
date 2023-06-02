@@ -3,10 +3,10 @@
 
 // ------------------------------------------------------------------------
 
-#define LCD_WIDTH               160
-#define LCD_HEIGHT              80
-#define LCD_FRAMEBUFFER_PIXELS  (LCD_WIDTH * LCD_HEIGHT)
-#define LCD_FRAMEBUFFER_BYTES   (LCD_WIDTH * LCD_HEIGHT * 2)
+#define LCD_W               160
+#define LCD_H              80
+#define LCD_FRAMEBUFFER_PIXELS  (LCD_W * LCD_H)
+#define LCD_FRAMEBUFFER_BYTES   (LCD_W * LCD_H * 2)
 
 // ------------------------------------------------------------------------
 // Basic functions. All functions are asynchronous, i.e., they return while
