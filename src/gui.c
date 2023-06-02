@@ -13,45 +13,45 @@
 GuiMode guiMode = StartMode;
 
 void guiMainLoop(void) {
-    uint8_t selectedLevel = 0;
+    uint8_t selectedLevel = 0, selectedBoxes = 0;
     while (1) {
         switch (guiMode) {
             case StartMode:
                 clear();
                 drawString(30, 30, "START MODE", WHITE);
                 if (getButton(BUTTON_1))
-                    guiMode = MenuMode;
+                    guiMode = LevelSelectMode;
                 break;
-            case MenuMode:
+            case LevelSelectMode:
                 clear();
-                if (getButton(JOY_RIGHT)) {
+                if (getButton(JOY_RIGHT))
                     selectedLevel = (selectedLevel + 2) % 3;
-                }
                 else if (getButton(JOY_LEFT))
                     selectedLevel = (selectedLevel + 1) % 3;
                 else if (getButton(BUTTON_1)) {
-                    gameInitialize(selectedLevel + 1);
+                    guiMode = BoxesSelectMode;
+                }
+                drawStringCenter(10, "Easy", selectedLevel == 0 ? RED : YELLOW);
+                drawStringCenter(30, "Medium", selectedLevel == 1 ? RED : YELLOW);
+                drawStringCenter(50, "Hard", selectedLevel == 2 ? RED : YELLOW);
+                break;
+            case BoxesSelectMode:
+                clear();
+                if (getButton(JOY_RIGHT))
+                    selectedBoxes = (selectedBoxes + 2) % 3;
+                else if (getButton(JOY_LEFT))
+                    selectedBoxes = (selectedBoxes + 1) % 3;
+                else if (getButton(BUTTON_1)) {
+                    gameInitialize(selectedLevel + 1, selectedBoxes + 1);
                     drawBoard();
                     guiMode = GameMode;
+                    // reset these two before entering GameMode so next time we select level and boxes, they are 0 by default
                     selectedLevel = 0;
+                    selectedBoxes = 0;
                 }
-                switch (selectedLevel) {
-                    case 0:
-                        drawStringCenter(10, "Easy", RED);
-                        drawStringCenter(30, "Medium", YELLOW);
-                        drawStringCenter(50, "Hard", YELLOW);
-                        break;
-                    case 1:
-                        drawStringCenter(10, "Easy", YELLOW);
-                        drawStringCenter(30, "Medium", RED);
-                        drawStringCenter(50, "Hard", YELLOW);
-                        break;
-                    case 2:
-                        drawStringCenter(10, "Easy", YELLOW);
-                        drawStringCenter(30, "Medium", YELLOW);
-                        drawStringCenter(50, "Hard", RED);
-                        break;
-                }
+                drawStringCenter(10, "1 Boxes", selectedBoxes == 0 ? RED : YELLOW);
+                drawStringCenter(30, "2 Boxes", selectedBoxes == 1 ? RED : YELLOW);
+                drawStringCenter(50, "3 Boxes", selectedBoxes == 2 ? RED : YELLOW);
                 break;
             case GameMode:
                 if (getButton(JOY_LEFT)) {

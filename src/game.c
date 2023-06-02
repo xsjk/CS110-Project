@@ -4,14 +4,18 @@
 
 GameState gameState;
 
-#define CASE(LEVEL) case LEVEL: gameState = gameLevel##LEVEL; break;
+#define CASE(LEVEL, BOXES) if (level == LEVEL && boxes == BOXES) gameState = gameLevel##LEVEL##_##BOXES;
 
-void gameInitialize(uint8_t level) {
-    switch (level) {
-        CASE(1)
-        CASE(2)
-        CASE(3)
-    }
+void gameInitialize(uint8_t level, uint8_t boxes) {
+    CASE(1, 1)
+    CASE(1, 2)
+    CASE(1, 3)
+    CASE(2, 1)
+    CASE(2, 2)
+    CASE(2, 3)
+    CASE(3, 1)
+    CASE(3, 2)
+    CASE(3, 3)
 }
 
 // deal with different cst move scenario

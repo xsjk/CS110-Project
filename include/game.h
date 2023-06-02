@@ -17,7 +17,7 @@ typedef enum {UP, DOWN, LEFT, RIGHT} Action;
 extern GameState gameState;
 
 // initialize the game with the given level
-void gameInitialize(uint8_t level);
+void gameInitialize(uint8_t level, uint8_t boxes);
 
 // move cst and change the gameState,
 // returns 1 if the game is over, 0 otherwise

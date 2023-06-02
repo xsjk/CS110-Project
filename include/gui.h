@@ -3,7 +3,8 @@
 
 typedef enum {
     StartMode,
-    MenuMode,
+    LevelSelectMode,
+    BoxesSelectMode,
     GameMode,
     PushingMode,
     GameWonMode,

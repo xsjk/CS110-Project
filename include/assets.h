@@ -21,4 +21,6 @@
 #define IMG_TREE 5
 extern const uint16_t images[IMAGE_COUNT][IMAGE_SIZE];
 
-extern const GameState gameLevel1, gameLevel2, gameLevel3;
+extern const GameState gameLevel1_1, gameLevel1_2, gameLevel1_3,
+                       gameLevel2_1, gameLevel2_2, gameLevel2_3,
+                       gameLevel3_1, gameLevel3_2, gameLevel3_3;
