@@ -30,10 +30,10 @@ void clear(void) {
     memset(framebuffer, 0, sizeof(framebuffer));
 }
 
-void displayScore(int score) {
+void displaySteps(int steps) {
     char str[21];
-    sprintf(str, "%20d", score);
-    drawString(0, 0, str, WHITE);
+    sprintf(str, "%20d", steps);
+    drawString(0, 10, str, WHITE);
 }
 
 void diplsayLevel(int level) {

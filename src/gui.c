@@ -74,12 +74,13 @@ void guiMainLoop(void) {
                         guiMode = GameWonMode;
                 }
                 drawBoard();
-                displayScore(gameState.step); // TODO: actually not score but step
+                displaySteps(gameState.step);
                 break;
             // case PushingMode:
             //     break;
             case GameWonMode:
-                drawString(30, 30, "WON MODE", GREEN);
+                drawString(LCD_W - 3 * 8, 30, "You", YELLOW);
+                drawString(LCD_W - 3 * 8, 50, "Win", YELLOW);
                 if (getButton(BUTTON_1))
                     guiMode = HighScoreMode;
                 break;

@@ -54,10 +54,10 @@ void refresh(void);
 void clear(void);
 
 /**
- * @brief Display score on the top right corner of the screen.
- * @param score The score to be displayed.
+ * @brief Display steps on the top right corner of the screen.
+ * @param steps The steps to be displayed.
  */
-void displayScore(int score);
+void displaySteps(int score);
 
 /**
  * @brief Display level on the top right corner of the screen.
