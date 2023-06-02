@@ -68,6 +68,7 @@ void guiMainLoop(void) {
                     guiMode = BoxesSelectMode;
                     clear();
                 }
+
                 break;
             case BoxesSelectMode:
             
@@ -86,8 +87,15 @@ void guiMainLoop(void) {
                     lcd_fb_disable();
                     guiMode = GameMode;
                 }
+                else if (getButton(BOOT_0)) {
+                    guiMode = LevelSelectMode;
+                    clear();
+                }
                 break;
             case GameMode:
+
+                clear();
+
                 if (getButton(JOY_LEFT)) {
                     if (gameMoveCST(RIGHT))
                         guiMode = GameWonMode;
@@ -100,29 +108,41 @@ void guiMainLoop(void) {
                     if (gameMoveCST(LEFT))
                         guiMode = GameWonMode;
                 }
-                if (getButton(JOY_CTR)) {
+                else if (getButton(JOY_CTR)) {
                     if (gameMoveCST(DOWN))
                         guiMode = GameWonMode;
                 }
-                drawBoard();
-                displaySteps(gameState.step);
+                else if (getButton(BOOT_0)) {
+                    guiMode = BoxesSelectMode;
+                    break;
+                }
 
+                drawBoard();
+                displaySteps(gameState.step); // TODO: actually not score but step
                 refresh();
 
                 break;
             // case PushingMode:
             //     break;
             case GameWonMode:
+            
                 drawString(LCD_W - 3 * 8, 30, "You", YELLOW);
                 drawString(LCD_W - 3 * 8, 50, "Win", YELLOW);
-                if (getButton(BUTTON_1))
+                
+                if (getButton(BUTTON_1)) {
                     guiMode = HighScoreMode;
-
-                refresh();
+                    clear();
+                }
+                if (getButton(BOOT_0)) {
+                    gameInitialize(selectedLevel + 1, selectedBoxes + 1);
+                    guiMode = GameMode;
+                }
                 
                 break;
             case HighScoreMode:
-                clear();
+            
+                lcd_fb_enable();
+                update_stars();
                 char str[20];
                 sprintf(str, "Level %d, %d Boxes", selectedLevel + 1, selectedBoxes + 1);
                 drawStringCenter(10, str, WHITE);
@@ -145,8 +165,6 @@ void guiMainLoop(void) {
                     selectedBoxes = 0;
                     clear();
                 }
-                refresh();
-
                 break;
         }
     }
