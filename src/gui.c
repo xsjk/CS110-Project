@@ -12,25 +12,45 @@
 
 GuiMode guiMode = StartMode;
 
-void guiUpdate(void) {
+void guiMainLoop(void) {
+    uint8_t selectedLevel = 0;
     while (1) {
         switch (guiMode) {
             case StartMode:
                 clear();
                 drawString(30, 30, "START MODE", WHITE);
-                refresh();
                 if (getButton(BUTTON_1))
                     guiMode = MenuMode;
                 break;
             case MenuMode:
                 clear();
-                drawString(30, 30, "MENU MODE", WHITE);
-                refresh();
-                if (getButton(BUTTON_1)) {
-                    gameInitialize(1);
+                if (getButton(JOY_RIGHT)) {
+                    selectedLevel = (selectedLevel + 2) % 3;
+                }
+                else if (getButton(JOY_LEFT))
+                    selectedLevel = (selectedLevel + 1) % 3;
+                else if (getButton(BUTTON_1)) {
+                    gameInitialize(selectedLevel + 1);
                     drawBoard();
-                    refresh();
                     guiMode = GameMode;
+                    selectedLevel = 0;
+                }
+                switch (selectedLevel) {
+                    case 0:
+                        drawString(60, 10, "Easy", RED);
+                        drawString(50, 30, "Medium", YELLOW);
+                        drawString(60, 50, "Hard", YELLOW);
+                        break;
+                    case 1:
+                        drawString(60, 10, "Easy", YELLOW);
+                        drawString(50, 30, "Medium", RED);
+                        drawString(60, 50, "Hard", YELLOW);
+                        break;
+                    case 2:
+                        drawString(60, 10, "Easy", YELLOW);
+                        drawString(50, 30, "Medium", YELLOW);
+                        drawString(60, 50, "Hard", RED);
+                        break;
                 }
                 break;
             case GameMode:
@@ -52,24 +72,21 @@ void guiUpdate(void) {
                 }
                 drawBoard();
                 displayScore(gameState.step); // TODO: actually not score but step
-                refresh();
                 break;
             // case PushingMode:
             //     break;
             case GameWonMode:
-                clear();
-                drawString(30, 20, "WON MODE", GREEN);
-                refresh();
+                drawString(30, 30, "WON MODE", GREEN);
                 if (getButton(BUTTON_1))
                     guiMode = HighScoreMode;
                 break;
             case HighScoreMode:
                 clear();
-                drawString(30, 40, "HIGHSCORE MODE", WHITE);
-                refresh();
+                drawString(30, 30, "HIGHSCORE MODE", WHITE);
                 if (getButton(BUTTON_1))
                     guiMode = StartMode;
                 break;
         }
+        refresh();
     }
 }

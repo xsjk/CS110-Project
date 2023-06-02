@@ -12,4 +12,5 @@ typedef enum {
 
 extern GuiMode guiMode;
 
-void guiUpdate(void);
+// main loop of thie project
+void guiMainLoop(void);
