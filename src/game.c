@@ -4,10 +4,12 @@
 
 GameState gameState;
 
+#define CASE(LEVEL) case LEVEL: gameState = gameLevel##LEVEL; break;
+
 void gameInitialize(uint8_t level) {
-    // initialize the game board
-    if (level == 1) {
-        gameState = gameLevel1;
+    switch (level) {
+        CASE(1)
+        CASE(2)
     }
 }
 
@@ -46,7 +48,7 @@ bool gameMoveCST(Action action) {
         bool nextPosIsCAGE = gameState.board[cstNextRow][cstNextCol] == GK_IN_CAGE;
         uint8_t cstNextNextRow = 2 * cstNextRow - gameState.cstRow,
                 cstNextNextCol = 2 * cstNextCol - gameState.cstCol;
-        if (gameState.board[cstNextNextRow][cstNextNextCol] == GK || gameState.board[cstNextNextRow][cstNextNextCol] == TREE)
+        if (gameState.board[cstNextNextRow][cstNextNextCol] == GK || gameState.board[cstNextNextRow][cstNextNextCol] == GK_IN_CAGE || gameState.board[cstNextNextRow][cstNextNextCol] == TREE)
             return false;
         if (gameState.board[cstNextNextRow][cstNextNextCol] == BLANK) {
             gameState.board[cstNextNextRow][cstNextNextCol] = GK;

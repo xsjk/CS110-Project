@@ -13,7 +13,7 @@ int main(void)
     lcd_init();        // init LCD
     button_init();
 
-    gameInitialize(1);
+    gameInitialize(2);
     // for( int i = 0; i < NUM_COLS; i++ )
     // {
     //     drawBlock(2, i, IMG_TREE);
