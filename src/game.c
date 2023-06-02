@@ -10,6 +10,7 @@ void gameInitialize(uint8_t level) {
     switch (level) {
         CASE(1)
         CASE(2)
+        CASE(3)
     }
 }
 

@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #include "button.h"
 #include "lcd.h"
 #include "color.h"
@@ -13,7 +14,7 @@ int main(void)
     lcd_init();        // init LCD
     button_init();
 
-    gameInitialize(2);
+    gameInitialize(3);
     // for( int i = 0; i < NUM_COLS; i++ )
     // {
     //     drawBlock(2, i, IMG_TREE);
@@ -81,6 +82,9 @@ int main(void)
         //     showString(25,25,"B", BLUE);
         // }
         drawBoard();
+        char step[10];
+        sprintf(step, "%d", gameState.step);
+        showString(LCD_W-24,0,step,WHITE);
         refresh();
     }
 }
