@@ -96,6 +96,16 @@ void clear(void);
 void displaySteps(int score);
 
 
+/**
+ * @brief Display steps on the top right corner of the screen.
+ * @param steps The steps to be displayed.
+ * @note the only difference between this and the latter function 
+ *       is that this function will not draw when two same scores
+ *       are passed in successively.
+ */
+void displaySteps2(int score);
+
+
 /**************************************************************/
 
 

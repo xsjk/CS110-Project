@@ -24,12 +24,13 @@ Vec3 camera_to_world(Vec3 v) {
 }
 
 Vec3 world_to_camera(Vec3 v) {
+    v.y = 8 - v.y;
     return mat4_transform(v, camera.mat);
 }
 
 
 void camera_init(void) {
-    set_camera(1);
+    set_camera(0.8);
     Vec3 dir = {{0,2,-9}};
     set_view((Vec3){{10,0,15}}, dir);
 }

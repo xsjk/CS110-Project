@@ -115,6 +115,12 @@ bool gameMode3DFadeInUpdate(void);
  * @brief update the fade out animation of Game mode
  * @return true if the animation if finished
 */
+bool gameMode3DFadeOutUpdate(void);
+
+/**
+ * @brief update the fade out animation of Game mode
+ * @return true if the animation if finished
+*/
 bool gameModeFadeOutUpdate(void);
 
 /**
@@ -147,3 +153,9 @@ bool highScoreModeUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[3][3]);
  * @return true if the animation if finished
 */
 bool highScoreModeFadeOutUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[3][3]);
+
+
+/**
+ * @brief update the animation of CST chasing GK
+*/
+void chaseAnimation(void);

@@ -20,11 +20,11 @@ void drawBoard(void) {
         for (int j = 0; j < BOARD_WIDTH; j++) {
             switch (gameState.board[i][j]) {
                 CASE(CST)
-                    CASE(GK)
-                    CASE(CAGE)
-                    CASE(GK_IN_CAGE)
-                    CASE(CST_ON_CAGE)
-                    CASE(TREE)
+                CASE(GK)
+                CASE(CAGE)
+                CASE(GK_IN_CAGE)
+                CASE(CST_ON_CAGE)
+                CASE(TREE)
                 case BLANK: break;
             }
         }
@@ -36,10 +36,10 @@ void drawBoard(void) {
 static void drawGameObject3D(int x, int y) {
     switch (gameState.board[y][x]) {
         case GK: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 1} } }, YELLOW); break;
-        case CST: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 1} } }, RED); break;
+        case CST: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 2} } }, RED); break;
         case CAGE: drawRectangle3D((Rectangle3D) { { { x, y, 0 } }, { {x + 1, y + 1, 0} } }, BLUE); break;
         case GK_IN_CAGE: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 1} } }, CYAN); break;
-        case CST_ON_CAGE: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 1} } }, MAGENTA); break;
+        case CST_ON_CAGE: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 2} } }, MAGENTA); break;
         case TREE: drawCube((Cube) { { { x, y, 0 } }, { {x + 1, y + 1, 1} } }, GREEN); break;
         case BLANK: break;
     }
@@ -130,7 +130,7 @@ bool pushAnimation3DUpdate(void) {
     /* clear only the two blocks that are moving */
     switch (data->imageID[3]) {
         case IMG_CST:
-            drawCube((Cube) { { { x[3], y[3], 0 } }, { { x[3] + 1, y[3] + 1, 1 } } }, BLACK);
+            drawCube((Cube) { { { x[3], y[3], 0 } }, { { x[3] + 1, y[3] + 1, 2 } } }, BLACK);
             break;
         default:
             /* This should not happen */
@@ -209,7 +209,7 @@ bool pushAnimation3DUpdate(void) {
         if (id == y[1] * BOARD_WIDTH + x[1]) {
             switch (data->imageID[3]) {
                 case IMG_CST:
-                    drawCube((Cube) { { { x[3], y[3], 0 } }, { { x[3] + 1, y[3] + 1, 1 } } }, RED);
+                    drawCube((Cube) { { { x[3], y[3], 0 } }, { { x[3] + 1, y[3] + 1, 2 } } }, RED);
                     break;
                 default:
                     /* This should not happen */
@@ -238,7 +238,7 @@ bool pushAnimation3DUpdate(void) {
                 break;
                 case CAGE: drawRectangle3D((Rectangle3D) { { { xx, yy, 0 } }, { {xx + 1, yy + 1, 0} } }, BLUE); break;
                 case GK_IN_CAGE: drawCube((Cube) { { { xx, yy, 0 } }, { {xx + 1, yy + 1, 1} } }, CYAN); break;
-                case CST_ON_CAGE: drawCube((Cube) { { { xx, yy, 0 } }, { {xx + 1, yy + 1, 1} } }, MAGENTA); break;
+                case CST_ON_CAGE: drawCube((Cube) { { { xx, yy, 0 } }, { {xx + 1, yy + 1, 2} } }, MAGENTA); break;
                 case TREE: drawCube((Cube) { { { xx, yy, 0 } }, { {xx + 1, yy + 1, 1} } }, GREEN); break;
                 case BLANK: break;
             }
@@ -576,9 +576,9 @@ bool boxesSelectModeFadeOutUpdate(uint8_t num) {
             int index = (i * BLOCK_HEIGHT + ii) * LCD_W + (j * BLOCK_WIDTH + jj); \
             RGB565 rgb; \
             rgb.c = blockImage[IMG_##NAME][ii * BLOCK_WIDTH + jj]; \
-            rgb.r *= (n) / (float)N; \
-            rgb.g *= (n) / (float)N; \
-            rgb.b *= (n) / (float)N; \
+            rgb.r = (float)rgb.b * (n) / (float)N; \
+            rgb.g = (float)rgb.g * (n) / (float)N; \
+            rgb.b = (float)rgb.g * (n) / (float)N; \
             framebuffer[index] = rgb.c; \
         } \
     } \
@@ -596,11 +596,11 @@ bool gameModeFadeInUpdate(void) {
         for (int j = 0; j < BOARD_WIDTH; j++) {
             switch (gameState.board[i][j]) {
                 CASE(CST)
-                    CASE(GK)
-                    CASE(CAGE)
-                    CASE(GK_IN_CAGE)
-                    CASE(CST_ON_CAGE)
-                    CASE(TREE)
+                CASE(GK)
+                CASE(CAGE)
+                CASE(GK_IN_CAGE)
+                CASE(CST_ON_CAGE)
+                CASE(TREE)
                 case BLANK: break;
             }
         }
@@ -674,6 +674,59 @@ bool gameMode3DFadeInUpdate(void) {
 
 
 #define DELAY 250
+bool gameMode3DFadeOutUpdate(void) {
+
+    static int n = 0;
+    static uint64_t last_update_time;
+    if (get_timer_value() - last_update_time < 27000 * PERIOD)
+        return false;
+    last_update_time = get_timer_value();
+
+    RGB565 y, r, b, c, m, g;
+    y.r = 0b11111 * (N - n) / (float)N;
+    y.g = 0b111111 * (N - n) / (float)N;
+    y.b = 0;
+
+    r.r = 0b11111 * (N - n) / (float)N;
+    r.g = 0;
+    r.b = 0;
+
+    b.r = 0;
+    b.g = 0;
+    b.b = 0b11111 * (N - n) / (float)N;
+
+    c.r = 0;
+    c.g = 0b111111 * (N - n) / (float)N;
+    c.b = 0b11111 * (N - n) / (float)N;
+
+    m.r = 0b11111 * (N - n) / (float)N;
+    m.g = 0;
+    m.b = 0b11111 * (N - n) / (float)N;
+
+    g.r = 0;
+    g.g = 0b111111 * (N - n) / (float)N;
+    g.b = 0;
+
+    
+    for (int i = 0; i < LCD_SIZE; i++) {
+        RGB565 rgb;
+        rgb.c = framebuffer[i];
+        rgb.r -= (N - n) / (float)N * rgb.r;
+        rgb.g -= (N - n) / (float)N * rgb.g;
+        rgb.b -= (N - n) / (float)N * rgb.b;
+        framebuffer[i] = rgb.c;
+    }
+
+    if (++n == N) {
+        n = 0;
+        return true;
+    }
+    return false;
+
+}
+
+
+#define DELAY 250
 bool gameModeFadeOutUpdate(void) {
 
     static int n = 0;
@@ -698,9 +751,6 @@ bool gameModeFadeOutUpdate(void) {
     w.g = 0b111111 * (N - n) / (float)N;
     w.b = 0b11111 * (N - n) / (float)N;
 
-    char str[21];
-    sprintf(str, "%20d", gameState.step);
-    drawString(0, 10, str, w.c);
 
     if (++n == N) {
         n = 0;
@@ -865,3 +915,96 @@ bool highScoreModeFadeOutUpdate(uint8_t level, uint8_t boxes, uint8_t bestSteps[
     return false;
 }
 #undef DELAY
+
+
+
+
+static void drawImageMask_s(int x, int y, int w, int h, const Color *img, uint64_t mask) {
+    w = w + (x - max(x, 0));
+    h = h + (y - max(y, 0));
+    x = max(0, x);
+    y = max(0, y);
+    w = min(LCD_W - x, w);
+    h = min(LCD_H - y, h);
+    for (int i = 0; i < h; i++)
+        for (int j = 0; j < w; j++)
+            if ((mask >> (i * w + j)) & 1)
+                drawPoint(x + j, y + i, img[i * w + j]);
+}
+
+static void drawImageMask_s_(int x, int y, int w, int h, const Color *img, uint64_t mask) {
+    w = w + (x - max(x, 0));
+    h = h + (y - max(y, 0));
+    x = max(0, x);
+    y = max(0, y);
+    w = min(LCD_W - x, w);
+    h = min(LCD_H - y, h);
+    for (int i = 0; i < h; i++)
+        for (int j = 0; j < w; j++)
+            if ((mask >> (i * w + j)) & 1)
+                drawPoint(x + j, y + i, img[i * w + (w - 1 - j)]);
+}
+
+
+
+static void fillArea_s(int x, int y, int w, int h, Color c) {
+    w = w + (x - max(x, 0));
+    h = h + (y - max(y, 0));
+    x = max(0, x);
+    y = max(0, y);
+    w = min(LCD_W - x, w);
+    h = min(LCD_H - y, h);
+    for (int i = 0; i < h; i++)
+        for (int j = 0; j < w; j++)
+            drawPoint(x + j, y + i, c);
+}
+
+
+void chaseAnimation(void) {
+    static uint64_t last_update_time;
+    if (get_timer_value() - last_update_time < 27000 * 7)
+        return;
+    last_update_time = get_timer_value();
+
+    const static int delta = 1;
+    static int x1 = -16; /* x coordinate of the start of img1: gk */
+    static int x2 = -32; /* x coordinate of the start of img2: cst */
+    static int y = 70; /* y coordinate of the start of img1 and img2 */
+
+
+    fillArea_s(x1, y, BLOCK_WIDTH, BLOCK_HEIGHT, BLACK);
+    fillArea_s(x2, y, BLOCK_WIDTH, BLOCK_HEIGHT, BLACK);
+
+
+    if (x1 > x2) {
+        /* now cst is chasing gk from left to right */
+        x1 += delta;
+        x2 += delta;
+
+
+        drawImageMask_s_(x1, y, BLOCK_WIDTH, BLOCK_HEIGHT, blockImage[IMG_GK], -1);
+        drawImageMask_s_(x2, y, BLOCK_WIDTH, BLOCK_HEIGHT, blockImage[IMG_CST], blockImageMask[IMG_CST]);
+
+        if (x2 > LCD_W) {
+            x1 = LCD_W;
+            x2 = x1 + (BLOCK_WIDTH + 5);
+        }
+
+    } else {
+        /* now cst is chasing gk from right to left */
+        x1 -= delta;
+        x2 -= delta;
+
+        
+        drawImageMask_s(x1, y, BLOCK_WIDTH, BLOCK_HEIGHT, blockImage[IMG_GK], -1);
+        drawImageMask_s(x2, y, BLOCK_WIDTH, BLOCK_HEIGHT, blockImage[IMG_CST], blockImageMask[IMG_CST]);
+
+
+        if (x2 < -16) {
+            x1 = -16;
+            x2 = x1 - (BLOCK_WIDTH + 5);
+        }
+
+    }
+
+}

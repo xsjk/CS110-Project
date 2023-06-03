@@ -40,6 +40,12 @@ void clear(void) {
 }
 
 void displaySteps(int steps) {
+    char str[21];
+    sprintf(str, "%3d", steps);
+    drawString2(17*8, 10, str, WHITE);
+}
+
+void displaySteps2(int steps) {
     static int last_steps;
     if (steps == last_steps)
         return;

@@ -13,8 +13,7 @@
 #include "starfield.h"
 #include "systick.h"
 
-GuiMode mode = GameModeStart;
-// GuiMode mode = StartMode;
+GuiMode mode = StartMode;
 
 
 
@@ -66,6 +65,8 @@ void mainloop(void) {
                 update_stars();
                 drawStringCenter(20, "WELCOME,", YELLOW);
                 drawStringCenter(40, "BRO", YELLOW);
+
+                chaseAnimation();
 
                 if (getButton(BUTTON_1)) {
                     mode = StartModeFadeOut;
@@ -203,8 +204,7 @@ void mainloop(void) {
 
                 lcd_fb_enable();
                 update_stars();
-                if (gameMode3DFadeInUpdate()) {
-                // if (gameModeFadeInUpdate()) {
+                if (gameModeFadeInUpdate()) {
                     lcd_fb_disable();
                     mode = GameMode;
                 }
@@ -212,14 +212,8 @@ void mainloop(void) {
 
             case GameMode:
 
-                // lcd_fb_enable();
-
-                // drawString2(10, 10, "GameMode", YELLOW);
-
-
-                // clear();
-                // drawBoard();
-                // drawBoard3D();
+                clear();
+                drawBoard();
                 
                 if (getButton(JOY_LEFT)) {
                     mode = PushAnimation;
@@ -242,15 +236,23 @@ void mainloop(void) {
                     next_mode = BoxesSelectModeFadeIn;
                     break;
                 }
+                else if (getButton(BUTTON_1)) {
+                    mode = GameModeFadeOut;
+                    next_mode = GameMode3DFadeIn;
+                    break;
+                }
+
 
                 displaySteps(gameState.step);
-                // refresh();
+
+                refresh();
 
                 break;
 
             case GameModeFadeOut:
 
                 lcd_fb_enable();
+
                 if (gameModeFadeOutUpdate()) {
                     mode = next_mode;
                 }
@@ -258,8 +260,7 @@ void mainloop(void) {
 
             case PushAnimation:
 
-                // if (pushAnimationUpdate()) {
-                if (pushAnimation3DUpdate()) {
+                if (pushAnimationUpdate()) {
                     if (isWin) {
                         mode = GameWonModeFadeIn;
                     }
@@ -267,13 +268,83 @@ void mainloop(void) {
                         mode = GameMode;
                     }
                 }
-                
                 refresh();
                 break;
+
+            case PushAnimation3D: 
+                 
+                if (pushAnimation3DUpdate()) {
+                    if (isWin) {
+                        mode = GameWonModeFadeIn;
+                    }
+                    else {
+                        mode = GameMode3D;
+                    }
+                }
+                refresh();
+                break;
+
+            case GameMode3DFadeIn:
+
+                lcd_fb_enable();
+                if (gameMode3DFadeInUpdate()) {
+                    mode = GameMode3D;
+                }
+                break;
+
+            case GameMode3D:
+
+                lcd_fb_enable();
+
+                drawBoard3D();
+                
+                if (getButton(JOY_LEFT)) {
+                    mode = PushAnimation3D;
+                    isWin = gameMoveCST(RIGHT);
+                }
+                else if (getButton(JOY_DOWN)) {
+                    mode = PushAnimation3D;
+                    isWin = gameMoveCST(UP);
+                }
+                else if (getButton(JOY_RIGHT)) {
+                    mode = PushAnimation3D;
+                    isWin = gameMoveCST(LEFT);
+                }
+                else if (getButton(JOY_CTR)) {
+                    mode = PushAnimation3D;
+                    isWin = gameMoveCST(DOWN);
+                }
+                else if (getButton(BOOT_0)) {
+                    mode = GameMode3DFadeOut;
+                    next_mode = BoxesSelectModeFadeIn;
+                    break;
+                }
+                else if (getButton(BUTTON_1)) {
+                    mode = GameMode3DFadeOut;
+                    next_mode = GameModeFadeIn;
+                    break;
+                }
+
+                displaySteps(gameState.step);
+                break;
+
+            case GameMode3DFadeOut:
+                
+                lcd_fb_enable();
+
+                if (gameMode3DFadeOutUpdate()) {
+                    mode = next_mode;
+                }
+
+
+
+                break;
+
             
             case GameWonModeFadeIn:
                 
                 lcd_fb_enable();
+
                 if (gameWonModeFadeInUpdate()) {
                     mode = GameWonModeFadeOut;
                 }
@@ -290,6 +361,7 @@ void mainloop(void) {
             case GameWonModeFadeOut:
             
                 lcd_fb_enable();
+
                 if (gameWonModeFadeOutUpdate()) {
                     mode = GameWonModeFadeIn;
                 }
@@ -321,17 +393,9 @@ void mainloop(void) {
                 
                 if (getButton(BUTTON_1)) {
                     // put best steps update here so that the new record can be always displayed
-                    bestSteps[selectedLevel][selectedBoxes] = gameState.step;
-                    mode = GameModeFadeOut;
+                    mode = HighScoreModeFadeOut;
                     next_mode = LevelSelectModeFadeIn;
                     
-                    // reset seleceted level and boxes
-                    selectedLevel = 0;
-                    selectedBoxes = 0;
-                }
-                else if (getButton(BOOT_0)) {
-                    mode = HighScoreModeFadeOut;
-                    next_mode = GameModeFadeIn;
                 }
                 break;
 
@@ -340,6 +404,10 @@ void mainloop(void) {
                 lcd_fb_enable();
                 update_stars();
                 if (highScoreModeFadeOutUpdate(selectedLevel, selectedBoxes, bestSteps)) {
+                    bestSteps[selectedLevel][selectedBoxes] = gameState.step;
+                    // reset seleceted level and boxes
+                    selectedLevel = 0;
+                    selectedBoxes = 0;
                     mode = next_mode;
                 }
                 break;  
