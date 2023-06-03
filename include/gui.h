@@ -16,7 +16,6 @@ typedef enum {
     GameMode,
     GameModeFadeOut,
     GameWonModeFadeIn,
-    GameWonMode,
     GameWonModeFadeOut,
     PushAnimation,
     HighScoreModeFadeIn,

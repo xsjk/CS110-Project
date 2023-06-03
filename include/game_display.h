@@ -12,6 +12,11 @@ void drawBoard(void);
 
 
 /**
+ * @brief draw the 3D board to the framebuffer
+*/
+void drawBoard3D(void);
+
+/**
  * @brief display welcome screen
 */
 void displayWelcome(void);
@@ -21,7 +26,14 @@ void displayWelcome(void);
  * @brief update the animation of moving for one timestep
  * @return true if the animation is finished
  */
-bool moveUpdate(void);
+bool pushAnimationUpdate(void);
+
+/**
+ * @brief update the 3D animation of moving for one timestep
+ * @return true if the animation is finished
+ */
+bool pushAnimation3DUpdate(void);
+
 
 /**
  * @brief the struct to hold data for push animation redering
@@ -92,6 +104,12 @@ bool boxesSelectModeFadeOutUpdate(uint8_t num);
  * @return true if the animation if finished
 */
 bool gameModeFadeInUpdate(void);
+
+/**
+ * @brief update the fade in animation of Game mode
+ * @return true if the animation if finished
+*/
+bool gameMode3DFadeInUpdate(void);
 
 /**
  * @brief update the fade out animation of Game mode

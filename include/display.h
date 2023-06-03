@@ -7,9 +7,22 @@
 #define LCD_H 80
 #define LCD_SIZE (LCD_W * LCD_H)
 
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 8
+#define BLOCK_SIZE (BLOCK_WIDTH*BLOCK_HEIGHT)
+
+#define NUM_ROWS (LCD_H/BLOCK_HEIGHT)
+#define NUM_COLS (LCD_W/BLOCK_WIDTH)
+#define NUM_BLOCKS (NUM_ROWS*NUM_COLS)
+
 extern Color framebuffer[LCD_SIZE];
 typedef uint8_t Depth;
+
+// Since the RAM is not enough, we use a smaller zbuffer that only stores the depth of each block.
 // extern Depth zbuffer[LCD_SIZE];
+extern Depth zbuffer[NUM_BLOCKS];
+extern uint8_t zorder[NUM_BLOCKS];
+
 #define DEPTH_MAX ((Depth)(-1))
 
 //Brush color
@@ -82,12 +95,6 @@ void clear(void);
  */
 void displaySteps(int score);
 
-/**
- * @brief Display level on the top right corner of the screen.
- * @param level The level to be displayed.
- */
-void displayLevel(int level);
-
 
 /**************************************************************/
 
@@ -140,6 +147,17 @@ void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color);
 */
 void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color);
 
+/**
+ * @brief Fill a triangle
+ * @param x1 The x coordinate of the first point
+ * @param y1 The y coordinate of the first point
+ * @param x2 The x coordinate of the second point
+ * @param y2 The y coordinate of the second point
+ * @param x3 The x coordinate of the third point
+ * @param y3 The y coordinate of the third point
+*/
+void fillTriangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t x3, uint8_t y3);
+
 
 /**
  * @brief Draw a circle
@@ -152,7 +170,7 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, Color color);
 
 
 /**
- * @brief Display characters
+ * @brief Display characters with transparancy
  * @param x The x coordinate of the starting point
  * @param y The y coordinate of the starting point
  * @param c The character to display
@@ -162,13 +180,33 @@ void drawChar(uint8_t x, uint8_t y, char c, Color color);
 
 
 /**
- * @brief Display string
+ * @brief Display characters without transparancy
+ * @param x The x coordinate of the starting point
+ * @param y The y coordinate of the starting point
+ * @param c The character to display
+ * @param color The color of the character
+*/
+void drawChar2(uint8_t x, uint8_t y, char c, Color color);
+
+
+/**
+ * @brief Display string with transparancy
  * @param x The x coordinate of the starting point
  * @param y The y coordinate of the starting point
  * @param p The pointer of the string to be displayed
  * @param color The color of the text
 */
 void drawString(uint8_t x, uint8_t y, const char *p, Color color);
+
+
+/**
+ * @brief Display string without transparancy
+ * @param x The x coordinate of the starting point
+ * @param y The y coordinate of the starting point
+ * @param p The pointer of the string to be displayed
+ * @param color The color of the text
+*/
+void drawString2(uint8_t x, uint8_t y, const char *p, Color color);
 
 
 /**
@@ -181,7 +219,7 @@ void drawStringCenter(uint8_t y, const char *p, uint16_t color);
 
 
 /**
- * @brief Display integer
+ * @brief Display integer with transparancy
  * @param x The x coordinate of the starting point
  * @param y The y coordinate of the starting point
  * @param num The integer to be displayed
@@ -189,6 +227,14 @@ void drawStringCenter(uint8_t y, const char *p, uint16_t color);
 */
 void drawInt(uint8_t x, uint8_t y, int num, Color color);
 
+/**
+ * @brief Display integer without transparancy
+ * @param x The x coordinate of the starting point
+ * @param y The y coordinate of the starting point
+ * @param num The integer to be displayed
+ * @param color The color of the text
+*/
+void drawInt2(uint8_t x, uint8_t y, int num, Color color);
 
 /**
  * @brief Display integer in center (vertically)
@@ -208,3 +254,6 @@ void drawIntCenter(uint8_t y, int num, uint16_t color);
 */
 void drawFloat(uint8_t x, uint8_t y, float num, Color color);
 
+
+
+void init_buffer(void);

@@ -5,12 +5,6 @@
 #include "game.h"
 #include "color.h"
 
-#define BLOCK_WIDTH 8
-#define BLOCK_HEIGHT 8
-#define BLOCK_SIZE (BLOCK_WIDTH*BLOCK_HEIGHT)
-
-#define NUM_ROWS (LCD_H/BLOCK_HEIGHT)
-#define NUM_COLS (LCD_W/BLOCK_WIDTH)
 
 #define BLOCK_TYPES 6
 #define BLOCK_MASK_TYPE 2
@@ -29,3 +23,4 @@ extern const uint64_t blockImageMask[BLOCK_MASK_TYPE];
 extern const GameState gameLevel1_1, gameLevel1_2, gameLevel1_3,
                        gameLevel2_1, gameLevel2_2, gameLevel2_3,
                        gameLevel3_1, gameLevel3_2, gameLevel3_3;
+                       

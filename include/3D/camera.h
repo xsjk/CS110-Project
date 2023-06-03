@@ -38,3 +38,9 @@ Vec3 camera_to_world(Vec3 v);
  * @return Vec3
  */
 Vec3 world_to_camera(Vec3 v);
+
+
+/**
+ * @brief Initialize the camera with default values
+ */
+void camera_init(void);

@@ -13,7 +13,8 @@
 #include "starfield.h"
 #include "systick.h"
 
-GuiMode mode = StartMode;
+GuiMode mode = GameModeStart;
+// GuiMode mode = StartMode;
 
 
 
@@ -194,6 +195,7 @@ void mainloop(void) {
             case GameModeStart:
 
                 gameInitialize(selectedLevel + 1, selectedBoxes + 1);
+                init_buffer();
                 mode = GameModeFadeIn;
                 break;
 
@@ -201,7 +203,8 @@ void mainloop(void) {
 
                 lcd_fb_enable();
                 update_stars();
-                if (gameModeFadeInUpdate()) {
+                if (gameMode3DFadeInUpdate()) {
+                // if (gameModeFadeInUpdate()) {
                     lcd_fb_disable();
                     mode = GameMode;
                 }
@@ -209,8 +212,14 @@ void mainloop(void) {
 
             case GameMode:
 
-                clear();
-                drawBoard();
+                // lcd_fb_enable();
+
+                // drawString2(10, 10, "GameMode", YELLOW);
+
+
+                // clear();
+                // drawBoard();
+                // drawBoard3D();
                 
                 if (getButton(JOY_LEFT)) {
                     mode = PushAnimation;
@@ -235,7 +244,7 @@ void mainloop(void) {
                 }
 
                 displaySteps(gameState.step);
-                refresh();
+                // refresh();
 
                 break;
 
@@ -249,7 +258,8 @@ void mainloop(void) {
 
             case PushAnimation:
 
-                if (moveUpdate()) {
+                // if (pushAnimationUpdate()) {
+                if (pushAnimation3DUpdate()) {
                     if (isWin) {
                         mode = GameWonModeFadeIn;
                     }

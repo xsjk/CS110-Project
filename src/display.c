@@ -2,11 +2,15 @@
 #include "assets.h"
 #include "font.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "lcd.h"
 #include "string.h"
+#include "defines.h"
+#include "3D/camera.h"
 
 Color framebuffer[LCD_SIZE];
-// Depth zbuffer[LCD_SIZE];
+Depth zbuffer[NUM_BLOCKS];
+uint8_t zorder[NUM_BLOCKS];
 
 void drawImage(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const Color* img) {
     for (int i = 0; i < h; i++) {
@@ -28,24 +32,23 @@ void drawBlock(int i, int j, int imageID) {
 }
 
 void refresh(void) {
-    lcd_write_u16(0, 0, 160, 80, (void *)framebuffer);
+    lcd_write_u16(0, 0, 160, 80-1, (void *)framebuffer);
 }
 
 void clear(void) {
-    // for (int y = 0; y < LCD_H; y++)
-    //     for (int x = 0; x < LCD_W; x++)
-    //         // drawPoint(x, y, RED);
-    //         framebuffer[y * LCD_W + x] = RED;
-    // for (int i = 0; i < sizeof(framebuffer)/sizeof(*framebuffer); i++)
-    //     framebuffer[i] = RED;
-
     memset(framebuffer, 0, sizeof(framebuffer));
 }
 
 void displaySteps(int steps) {
+    static int last_steps;
+    if (steps == last_steps)
+        return;
     char str[21];
+    sprintf(str, "%20d", last_steps);
+    drawString(0, 10, str, BLACK);
     sprintf(str, "%20d", steps);
     drawString(0, 10, str, WHITE);
+    last_steps = steps;
 }
 
 void diplsayLevel(int level) {
@@ -72,34 +75,28 @@ void fillAll(Color color) {
 }
 
 void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color) {
-    int xerr = 0, yerr = 0, distance;
-    int incx, incy, uRow, uCol;
-    int delta_x = x2 - x1;
-    int delta_y = y2 - y1;
-    uRow = x1;
-    uCol = y1;
-    if (delta_x > 0) incx = 1;
-    else if (delta_x == 0) incx = 0;
-    else { incx = -1; delta_x = -delta_x; }
-    if (delta_y > 0) incy = 1;
-    else if (delta_y == 0) incy = 0;
-    else { incy = -1; delta_y = -delta_x; }
-    if (delta_x > delta_y) distance = delta_x;
-    else distance = delta_y;
-    for (int t = 0; t < distance + 1; t++) {
-        drawPoint(uRow, uCol, color);
-        xerr += delta_x;
-        yerr += delta_y;
-        if (xerr > distance) {
-            xerr -= distance;
-            uRow += incx;
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
+
+    while (1) {
+        drawPoint(x1, y1, color);
+        if (x1 == x2 && y1 == y2)
+            break;
+        int e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
         }
-        if (yerr > distance) {
-            yerr -= distance;
-            uCol += incy;
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
         }
     }
 }
+
 
 
 void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color) {
@@ -109,6 +106,12 @@ void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Color color) 
     drawLine(x2, y1, x2, y2, color);
 }
 
+
+void fillTriangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t x3, uint8_t y3) {
+    uint8_t min_x = min(min(x1, x2), x3);
+    // TODO: 
+
+}
 
 
 void drawCircle(uint8_t x0, uint8_t y0, uint8_t r, Color color) {
@@ -142,6 +145,17 @@ void drawChar(uint8_t x, uint8_t y, char c, Color color) {
 }
 
 
+void drawChar2(uint8_t x, uint8_t y, char c, Color color) {
+    int num = c - ' ';
+    for (int pos = 0; pos < 16; pos++) {
+        uint8_t temp = asc2_1608[num][pos];
+        for (int t = 0; t < 8; t++) {
+            drawPoint(x + pos / 2, y - t + 8 * (1 + pos % 2), (temp & 1) ? color : 0);
+            temp >>= 1;
+        }
+    }
+}
+
 
 void drawString(uint8_t x, uint8_t y, const char *p, Color color) {
     while (*p != '\0') {
@@ -154,6 +168,16 @@ void drawString(uint8_t x, uint8_t y, const char *p, Color color) {
 }
 
 
+void drawString2(uint8_t x, uint8_t y, const char *p, Color color) {
+    while (*p != '\0') {
+        if (x > LCD_W - 8) { x = 0;y += 16; }
+        if (y > LCD_H - 16) { y = x = 0; fillAll(RED); }
+        drawChar2(x, y, *p, color);
+        x += 8;
+        p++;
+    }
+}
+
 
 void drawStringCenter(uint8_t y, const char *p, uint16_t color) {
     char str[21];
@@ -162,11 +186,16 @@ void drawStringCenter(uint8_t y, const char *p, uint16_t color) {
 }
 
 
-
 void drawInt(uint8_t x, uint8_t y, int num, uint16_t color) {
     char str[10];
     sprintf(str, "%d", num);
     drawString(x, y, str, color);
+}
+
+void drawInt2(uint8_t x, uint8_t y, int num, uint16_t color) {
+    char str[10];
+    sprintf(str, "%d", num);
+    drawString2(x, y, str, color);
 }
 
 
@@ -178,7 +207,26 @@ void drawIntCenter(uint8_t y, int num, uint16_t color) {
 
 
 void drawFloat(uint8_t x, uint8_t y, float num, uint16_t color) {
-    char str[10];
-    sprintf(str, "%f", num);
-    drawString(x, y, str, color);
+    char str[20];
+    // TODO fix
+}
+
+
+void init_buffer() {
+    /* init zorder */
+    for (int i = 0; i < NUM_BLOCKS; i++) {
+        zorder[i] = i;
+    }
+    /* init zbuffer */
+    for (int i = 0 ; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            Vec3 v = {{i + 0.5, j + 0.5, 0.5}};
+            zbuffer[i * NUM_COLS + j] = world_to_camera(v).z * (1 << (8 * sizeof(Depth)));
+        }
+    }
+    /* sort */
+    for ( int i = 0; i < NUM_BLOCKS; i++)
+        for (int j = i + 1; j < NUM_BLOCKS; j++)
+            if (zorder[i] < zorder[j])
+                swap(zorder[i], zorder[j]);
 }
