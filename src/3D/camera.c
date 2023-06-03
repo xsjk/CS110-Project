@@ -5,7 +5,6 @@ Camera camera;
 
 void set_camera(float zoom) {
     camera.perspective = make_perspective(zoom, (LCD_W/LCD_H), 0.1, 100);
-    camera.view = make_view((Vec3){0}, (Vec3){{1,0,0}});
     camera.mat = mat4_mul(camera.perspective.mat, camera.view.mat);
 }
 

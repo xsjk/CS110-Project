@@ -25,6 +25,8 @@ Affine make_affine(Vec3 displacement, Rotation rotation, Vec3 scale) {
 
 View make_view(Vec3 eye, Vec3 front) {
     View result;
+    result.eye = eye;
+    result.front = front;
     Vec3 f = normalize(front);
     Vec3 s = normalize((Vec3){{f.y, - f.x, 0}});
     Vec3 u = cross(s, f);
